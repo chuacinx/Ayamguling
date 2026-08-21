@@ -21,274 +21,266 @@
   --primary-red: #d71920;
   --dark-red: #8f080d;
   --gold: #ffc837;
-  --bg-app: #f6f3ed;
+  --bg-app: #f7f5f0;
   --surface: #ffffff;
   --text-main: #1f1a17;
   --text-sub: #8a7f6c;
-  --border: #e8e2d5;
+  --border: #ece6da;
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-body {
-  margin: 0; background: #0a0102; color: var(--text-main);
+html, body {
+  margin: 0; padding: 0; background: #0a0102; color: var(--text-main);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  display: flex; justify-content: center;
+  display: flex; justify-content: center; height: 100vh; overflow: hidden;
 }
 
 .app {
-  width: 100%; max-width: 430px; min-height: 100vh;
-  background: var(--bg-app); position: relative; padding-bottom: 85px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.6); overflow-x: hidden;
+  width: 100%; max-width: 430px; height: 100vh;
+  background: var(--bg-app); position: relative;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6); overflow: hidden;
+  display: flex; flex-direction: column;
 }
 
-/* ========= SLIDE PAGE TRANSITION ========= */
+/* ========= SLIDE PAGE CONTAINMENT (BATAS SCROLL) ========= */
 .pages-container {
-  display: flex;
-  width: 300%;
-  min-height: calc(100vh - 85px);
+  display: flex; width: 300%; height: calc(100vh - 76px);
   transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
 }
 
 .page {
-  width: 33.3333%;
-  flex-shrink: 0;
-  display: block !important;
-  opacity: 1;
+  width: 33.3333%; height: 100%; overflow-y: auto;
+  -webkit-overflow-scrolling: touch; padding-bottom: 24px;
 }
 
-.pagewrap { padding: 16px 14px 24px; }
+.pagewrap { padding: 12px 12px 20px; }
 
-/* ========= BANNER DEDICATED ========= */
+/* ========= BANNER SIMPEL ========= */
 .banner {
-  width: 100%; height: 150px; border-radius: 20px;
-  overflow: hidden; position: relative; margin-bottom: 14px;
-  box-shadow: 0 8px 24px rgba(143, 8, 13, 0.3);
-  background: linear-gradient(135deg, #d71920 0%, #9e0b11 50%, #4a0205 100%);
+  width: 100%; height: 180px; border-radius: 16px;
+  overflow: hidden; position: relative; margin-bottom: 12px;
+  background: linear-gradient(135deg, #d71920 0%, #8f080d 100%);
   background-size: cover; background-position: center;
-  display: flex; align-items: flex-end; padding: 16px 18px;
-  border: 1px solid rgba(255, 200, 55, 0.4);
-  cursor: pointer;
+  display: flex; align-items: flex-end; padding: 12px 14px;
+  border: 1px solid rgba(255, 200, 55, 0.3); cursor: pointer;
 }
 
 .banner-overlay {
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(15, 2, 3, 0.8) 100%);
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(15, 2, 3, 0.75) 100%);
   z-index: 1;
 }
 
 .banner .b-text { position: relative; z-index: 2; color: #fff; width: 100%; }
-.banner .b-title {
-  font-size: 21px; font-weight: 900; letter-spacing: -0.3px;
-  background: linear-gradient(45deg, #ffffff, #ffe399);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.banner .b-sub { font-size: 11px; color: var(--gold); font-weight: 700; margin-top: 2px; text-transform: uppercase; }
+.banner .b-title { font-size: 18px; font-weight: 900; color: #fff; }
+.banner .b-sub { font-size: 10px; color: var(--gold); font-weight: 700; margin-top: 1px; text-transform: uppercase; }
 
 .upload-hint {
-  position: absolute; top: 10px; right: 10px; z-index: 2;
-  font-size: 9px; color: #fff; background: rgba(0,0,0,0.45);
-  backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.2);
+  position: absolute; top: 8px; right: 8px; z-index: 2;
+  font-size: 9px; color: #fff; background: rgba(0,0,0,0.4);
+  padding: 3px 7px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2);
 }
 
-/* ========= HEADER ========= */
-.header { margin-bottom: 14px; }
-.header h1 { margin: 0; font-size: 22px; font-weight: 900; color: var(--dark-red); letter-spacing: -0.5px; }
-.header p { margin: 3px 0 0; color: var(--text-sub); font-size: 11px; font-weight: 500; }
+/* ========= HEADER & TITLES ========= */
+.header { margin-bottom: 10px; }
+.header h1 { margin: 0; font-size: 18px; font-weight: 900; color: var(--dark-red); }
+.header p { margin: 1px 0 0; color: var(--text-sub); font-size: 10px; font-weight: 500; }
 
 .section-title {
-  font-size: 12px; font-weight: 800; color: var(--text-main);
-  margin: 16px 2px 8px; display: flex; justify-content: space-between; align-items: center;
-  text-transform: uppercase; letter-spacing: 0.5px;
+  font-size: 11px; font-weight: 800; color: var(--text-main);
+  margin: 12px 2px 6px; display: flex; justify-content: space-between; align-items: center;
+  text-transform: uppercase; letter-spacing: 0.3px;
 }
-.section-title small { font-weight: 500; color: var(--text-sub); text-transform: none; font-size: 10px; }
+.section-title small { font-weight: 500; color: var(--text-sub); font-size: 9px; text-transform: none; }
 
-/* ========= CARDS ========= */
+/* ========= CARDS SIMPEL ========= */
 .card {
-  background: var(--surface); border-radius: 18px; margin-bottom: 14px;
+  background: var(--surface); border-radius: 14px; margin-bottom: 10px;
   border: 1px solid var(--border); overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
 }
 
 .card-head {
-  padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid #f2ede4; background: linear-gradient(90deg, #fffcf7, #ffffff);
+  padding: 10px 12px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #f2ede4; background: #faf8f5;
 }
-.card-head-left { display: flex; align-items: center; gap: 10px; }
+.card-head-left { display: flex; align-items: center; gap: 8px; }
 .icon {
-  width: 34px; height: 34px; border-radius: 10px;
-  background: linear-gradient(135deg, #fff5dc, #ffeaaf);
-  display: flex; justify-content: center; align-items: center;
-  font-size: 16px; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(212,154,0,0.15);
+  width: 28px; height: 28px; border-radius: 8px;
+  background: #fff5dc; display: flex; justify-content: center; align-items: center;
+  font-size: 14px; flex-shrink: 0;
 }
-.card-head h2 { margin: 0; font-size: 14px; font-weight: 800; color: var(--text-main); }
-.card-head span { display: block; color: var(--text-sub); font-size: 10px; }
+.card-head h2 { margin: 0; font-size: 12px; font-weight: 800; color: var(--text-main); }
+.card-head span { display: block; color: var(--text-sub); font-size: 9px; }
 
 /* ========= FORM & STEPPERS ========= */
-.sale-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; border-top: 1px solid #f5f0e6; }
+.sale-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-top: 1px solid #f7f3eb; }
 .sale-row:first-child { border-top: none; }
-.sale-name { font-size: 13px; font-weight: 700; color: #2c2520; }
-.sale-name small { display: block; color: var(--text-sub); font-size: 10px; font-weight: 500; margin-top: 2px; }
+.sale-name { font-size: 12px; font-weight: 700; color: #2c2520; }
+.sale-name small { display: block; color: var(--text-sub); font-size: 9px; font-weight: 500; margin-top: 1px; }
 
-.stepper { display: flex; align-items: center; gap: 8px; }
+.stepper { display: flex; align-items: center; gap: 6px; }
 .stepper button {
-  width: 32px; height: 32px; border-radius: 9px; border: 1px solid #e0d7cb;
-  background: #fff; font-size: 16px; font-weight: bold; cursor: pointer; color: #332c27;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.03); transition: transform 0.1s;
+  width: 30px; height: 30px; border-radius: 8px; border: 1px solid #e0d7cb;
+  background: #fff; font-size: 14px; font-weight: bold; cursor: pointer; color: #332c27;
+  transition: transform 0.1s;
 }
 .stepper button:active { transform: scale(0.92); }
-.stepper .plus {
-  background: linear-gradient(135deg, #d71920, #9e0b11);
-  border: none; color: white; box-shadow: 0 3px 8px rgba(215,25,32,0.3);
-}
+.stepper .plus { background: var(--primary-red); border: none; color: white; }
 .stepper input {
-  width: 75px; height: 32px; border: 1px solid #e0d7cb; border-radius: 9px;
-  text-align: center; font-family: monospace; font-size: 14px; font-weight: 800; background: #fdfbf7;
+  width: 60px; height: 30px; border: 1px solid #e0d7cb; border-radius: 8px;
+  text-align: center; font-family: monospace; font-size: 13px; font-weight: 800; background: #fdfbf7;
 }
 
 .sale-total {
-  background: linear-gradient(135deg, #1f1a17, #342c26); color: white;
-  padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;
+  background: #1f1a17; color: white; padding: 10px 14px;
+  display: flex; justify-content: space-between; align-items: center;
 }
-.sale-total span { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; color: #d1c7b7; }
-.sale-total strong { font-family: monospace; font-size: 21px; color: var(--gold); }
+.sale-total span { font-size: 9px; font-weight: 700; color: #d1c7b7; letter-spacing: 0.5px; }
+.sale-total strong { font-family: monospace; font-size: 18px; color: var(--gold); }
 
-.penusukan { padding: 14px 16px; background: #fffdf5; border-top: 2px dashed #f0e3bf; }
+.penusukan { padding: 10px 12px; background: #fffdf5; border-top: 1px dashed #ede2c4; }
 .penusukan-top { display: flex; justify-content: space-between; align-items: center; }
-.penusukan-title { font-size: 12px; font-weight: 800; }
-.penusukan-title small { display: block; color: var(--text-sub); font-weight: 500; font-size: 10px; margin-top: 1px; }
-.penusukan-input { width: 78px; height: 34px; border: 1px solid #dcd0b9; border-radius: 9px; text-align: center; font-family: monospace; font-size: 14px; font-weight: 800; background: #fff; }
+.penusukan-title { font-size: 11px; font-weight: 800; }
+.penusukan-title small { display: block; color: var(--text-sub); font-weight: 500; font-size: 9px; }
+.penusukan-input { width: 65px; height: 30px; border: 1px solid #dcd0b9; border-radius: 8px; text-align: center; font-family: monospace; font-size: 13px; font-weight: 800; background: #fff; }
 
-.difference { margin-top: 10px; padding: 10px 14px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; }
-.difference-label { font-size: 10px; font-weight: 800; }
-.difference-desc { font-size: 9px; opacity: 0.8; }
-.difference-number { font-family: monospace; font-size: 18px; font-weight: 800; }
+.difference { margin-top: 8px; padding: 8px 10px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; }
+.difference-label { font-size: 9px; font-weight: 800; }
+.difference-desc { font-size: 8px; opacity: 0.8; }
+.difference-number { font-family: monospace; font-size: 15px; font-weight: 800; }
 
-.sale-note { padding: 12px 16px; border-top: 1px solid #f5f0e6; }
-.sale-note label { display: block; margin-bottom: 5px; font-size: 10px; color: var(--text-sub); font-weight: 700; }
-.sale-note input { width: 100%; height: 36px; border: 1px solid #e0d7cb; border-radius: 9px; padding: 0 10px; font-size: 11px; background: #fdfbf7; outline: none; }
+.sale-note { padding: 10px 12px; border-top: 1px solid #f7f3eb; }
+.sale-note label { display: block; margin-bottom: 4px; font-size: 9px; color: var(--text-sub); font-weight: 700; }
+.sale-note input { width: 100%; height: 32px; border: 1px solid #e0d7cb; border-radius: 8px; padding: 0 8px; font-size: 10px; background: #fdfbf7; outline: none; }
 
 .sale-save, .save {
-  height: 40px; border-radius: 11px; border: none;
+  height: 36px; border-radius: 9px; border: none;
   background: linear-gradient(135deg, #d71920 0%, #9e0b11 100%);
-  color: #fff; font-weight: 700; font-size: 12px; width: calc(100% - 32px);
-  margin: 10px 16px 14px; cursor: pointer; box-shadow: 0 4px 14px rgba(215,25,32,0.3);
+  color: #fff; font-weight: 700; font-size: 11px; width: calc(100% - 24px);
+  margin: 8px 12px 10px; cursor: pointer; box-shadow: 0 3px 10px rgba(215,25,32,0.2);
 }
 
 /* ========= STOCK FORM ========= */
-.stock-body { padding: 0 16px 14px; }
-.stock-line { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f5f0e6; }
-.stock-label { font-size: 12px; font-weight: 600; }
-.number-input { width: 78px; height: 32px; border: 1px solid #e0d7cb; border-radius: 7px; text-align: center; font-family: monospace; font-weight: 800; font-size: 13px; }
-.stock-total { margin-top: 12px; padding: 11px 14px; border-radius: 10px; background: #1f1a17; color: white; display: flex; align-items: center; justify-content: space-between; }
-.stock-total label { font-size: 10px; font-weight: 800; color: var(--gold); }
-.stock-total-input-wrap { display: flex; align-items: center; gap: 6px; }
-.stock-total-input { width: 78px; height: 32px; border: 1px solid rgba(255,255,255,0.25); border-radius: 7px; text-align: center; font-family: monospace; font-weight: 800; font-size: 14px; background: rgba(255,255,255,0.12); color: #fff; }
-.stock-unit-label { font-size: 11px; font-weight: 700; }
-.note-input { width: 100%; height: 34px; border: 1px solid #e0d7cb; border-radius: 7px; padding: 0 10px; font-size: 11px; margin-top: 10px; }
-.stock-item-save { width: 100%; margin: 12px 0 0; height: 36px; }
-.stock-actions { padding: 0 4px 10px; }
+.stock-body { padding: 0 12px 10px; }
+.stock-line { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #f7f3eb; }
+.stock-label { font-size: 11px; font-weight: 600; }
+.number-input { width: 65px; height: 28px; border: 1px solid #e0d7cb; border-radius: 6px; text-align: center; font-family: monospace; font-weight: 800; font-size: 12px; }
+.stock-total { margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: #1f1a17; color: white; display: flex; align-items: center; justify-content: space-between; }
+.stock-total label { font-size: 9px; font-weight: 800; color: var(--gold); }
+.stock-total-input-wrap { display: flex; align-items: center; gap: 4px; }
+.stock-total-input { width: 65px; height: 28px; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; text-align: center; font-family: monospace; font-weight: 800; font-size: 12px; background: rgba(255,255,255,0.1); color: #fff; }
+.stock-unit-label { font-size: 10px; font-weight: 700; }
+.note-input { width: 100%; height: 30px; border: 1px solid #e0d7cb; border-radius: 6px; padding: 0 8px; font-size: 10px; margin-top: 8px; }
+.stock-item-save { width: 100%; margin: 8px 0 0; height: 32px; }
+.stock-actions { padding: 0 2px 8px; }
 .stock-actions .save { width: 100%; margin: 0; }
-.save-status { text-align: center; font-size: 10px; font-weight: 600; color: var(--text-sub); min-height: 14px; padding-bottom: 4px; }
+.save-status { text-align: center; font-size: 9px; font-weight: 600; color: var(--text-sub); min-height: 12px; padding-bottom: 2px; }
 
 /* ========= CHART & TABLES ========= */
-.chart-card { padding: 16px; }
-.chart-wrap { height: 190px; position: relative; margin-top: 6px; }
-.legend-list { margin-top: 12px; display: flex; flex-direction: column; gap: 7px; }
-.legend-row { display: flex; align-items: center; gap: 8px; font-size: 11px; }
-.legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.chart-card { padding: 12px; }
+.chart-wrap { height: 160px; position: relative; margin-top: 4px; }
+.legend-list { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
+.legend-row { display: flex; align-items: center; gap: 6px; font-size: 10px; }
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
 .legend-name { flex: 1; color: #4a4235; font-weight: 600; }
 .legend-val { font-family: monospace; font-weight: 800; }
 
-.item-filter-tabs { display: flex; gap: 6px; overflow-x: auto; padding: 4px 2px 10px; scrollbar-width: none; }
+.item-filter-tabs { display: flex; gap: 4px; overflow-x: auto; padding: 2px 2px 8px; scrollbar-width: none; }
 .item-filter-tabs::-webkit-scrollbar { display: none; }
 .tab-btn {
-  white-space: nowrap; background: #fff; border: 1px solid #e0d7cb; border-radius: 16px;
-  padding: 6px 14px; font-size: 11px; font-weight: 700; color: #554e42; cursor: pointer;
+  white-space: nowrap; background: #fff; border: 1px solid #e0d7cb; border-radius: 12px;
+  padding: 4px 10px; font-size: 10px; font-weight: 700; color: #554e42; cursor: pointer;
 }
-.tab-btn.active { background: linear-gradient(135deg, #d71920, #9e0b11); color: #fff; border-color: #d71920; }
+.tab-btn.active { background: var(--primary-red); color: #fff; border-color: var(--primary-red); }
 
-.riwayat-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; }
-.riwayat-head h2 { margin: 0; font-size: 14px; font-weight: 800; }
+.riwayat-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; }
+.riwayat-head h2 { margin: 0; font-size: 12px; font-weight: 800; }
 .month-controls { display: flex; align-items: center; gap: 4px; }
-.filter-select { border: 1px solid #dcd3c4; border-radius: 6px; font-size: 10px; font-weight: 600; padding: 4px 6px; background: #fff; }
+.filter-select { border: 1px solid #dcd3c4; border-radius: 5px; font-size: 9px; font-weight: 600; padding: 3px 4px; background: #fff; }
 
 .table-scroll { overflow-x: auto; padding-bottom: 2px; }
-table.excel-table { border-collapse: collapse; width: 100%; font-size: 11px; background: #fff; }
-table.excel-table th { background: #f6f3eb; color: #4a4235; font-weight: 800; padding: 6px 4px; border: 1px solid #e2dad0; text-align: center; }
-table.excel-table td { padding: 0; border: 1px solid #eee7dc; text-align: center; height: 28px; }
+table.excel-table { border-collapse: collapse; width: 100%; font-size: 10px; background: #fff; }
+table.excel-table th { background: #f6f3eb; color: #4a4235; font-weight: 800; padding: 5px 3px; border: 1px solid #e2dad0; text-align: center; }
+table.excel-table td { padding: 0; border: 1px solid #eee7dc; text-align: center; height: 26px; }
 table.excel-table tr:nth-child(even) td { background-color: #faf8f5; }
 
-.cell-input { width: 100%; height: 100%; border: none; background: transparent; text-align: center; font-family: monospace; font-size: 11px; font-weight: 600; outline: none; }
+.cell-input { width: 100%; height: 100%; border: none; background: transparent; text-align: center; font-family: monospace; font-size: 10px; font-weight: 600; outline: none; }
 .cell-input:focus { background: #fff3d1; }
-.cell-input.text-left { text-align: left; padding: 0 6px; font-family: inherit; }
-.excel-total-row td { background: #efebe4 !important; font-weight: bold; font-family: monospace; padding: 6px 4px; }
-td.empty { text-align: center; color: var(--text-sub); padding: 18px 8px; font-size: 11px; }
-.danger-btn { margin: 10px 16px; height: 34px; border-radius: 8px; border: 1px solid #f0c9c5; background: #fdf3f1; color: #b3261e; font-size: 11px; font-weight: 700; cursor: pointer; width: calc(100% - 32px); }
+.cell-input.text-left { text-align: left; padding: 0 4px; font-family: inherit; }
+.excel-total-row td { background: #efebe4 !important; font-weight: bold; font-family: monospace; padding: 4px 3px; }
+td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-size: 10px; }
+.danger-btn { margin: 8px 12px; height: 30px; border-radius: 6px; border: 1px solid #f0c9c5; background: #fdf3f1; color: #b3261e; font-size: 10px; font-weight: 700; cursor: pointer; width: calc(100% - 24px); }
 
-/* ========= DESAIN SEGMENTED TAB BARU (MODERN SLIDE TAB) ========= */
-.bottomnav {
-  position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
-  width: calc(100% - 24px); max-width: 400px;
-  background: #180304;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 200, 55, 0.35);
-  display: flex; z-index: 100; padding: 4px;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.5);
+/* ========= DESAIN BOTTOM NAV BAR ULTRA CLEAN ========= */
+.bottomnav-wrapper {
+  position: absolute; bottom: 12px; left: 0; right: 0;
+  display: flex; justify-content: center; z-index: 100;
+  padding: 0 16px;
 }
 
-/* Indicator Kapsul Emas Geser */
+.bottomnav {
+  height: 56px; width: 100%; max-width: 380px;
+  background: rgba(22, 10, 11, 0.92);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 200, 55, 0.25);
+  border-radius: 20px;
+  display: flex; position: relative; padding: 4px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
 .nav-indicator {
   position: absolute; top: 4px; bottom: 4px; left: 4px;
   width: calc((100% - 8px) / 3);
   background: linear-gradient(135deg, #d71920 0%, #a30c12 100%);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(215, 25, 32, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(215, 25, 32, 0.35);
   transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
   z-index: 1;
 }
 
 .navbtn {
-  flex: 1; border: none; background: none; padding: 10px 0;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  cursor: pointer; color: #a89d89; font-size: 12px; font-weight: 800;
-  position: relative; z-index: 2; transition: color 0.3s;
+  flex: 1; border: none; background: none; padding: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px; cursor: pointer; color: #a39785; font-size: 10px; font-weight: 700;
+  position: relative; z-index: 2; transition: color 0.25s, transform 0.1s;
 }
 
-.navbtn .nicon { font-size: 16px; }
-.navbtn.active { color: #ffffff; }
+.navbtn:active { transform: scale(0.95); }
+.navbtn .nicon { font-size: 15px; line-height: 1; }
+.navbtn.active { color: #ffffff; font-weight: 800; }
 
-.footer { text-align: center; padding: 10px; color: var(--text-sub); font-size: 10px; }
+.footer { text-align: center; padding: 8px; color: var(--text-sub); font-size: 9px; }
 .footer b { color: var(--primary-red); }
 </style>
 </head>
 <body>
 
-<!-- ===== OVERLAY PIN (gerbang sinkronisasi multi-device) ===== -->
+<!-- OVERLAY PIN -->
 <div id="pinOverlay" style="position:fixed; inset:0; background:#0a0102; z-index:999; display:flex; align-items:center; justify-content:center; padding:20px;">
-  <div style="width:100%; max-width:340px; background:#fff; border-radius:18px; padding:24px 20px; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
-    <div style="font-size:34px; text-align:center; margin-bottom:6px;">🔒</div>
-    <div style="font-size:16px; font-weight:900; text-align:center; color:#8f080d;">AGE MT. HARYONO</div>
-    <div style="font-size:11px; text-align:center; color:#8a7f6c; margin:4px 0 16px;">Masukkan PIN untuk sinkronisasi data antar device</div>
-    <input id="pinInput" type="password" inputmode="numeric" placeholder="PIN" onkeydown="if(event.key==='Enter'){submitPin();}" style="width:100%; height:44px; border:1px solid #e0d7cb; border-radius:10px; text-align:center; font-size:18px; letter-spacing:4px; font-family:monospace; margin-bottom:10px;">
-    <button id="pinSubmitBtn" onclick="submitPin()" style="width:100%; height:42px; border:none; border-radius:10px; background:linear-gradient(135deg,#d71920,#9e0b11); color:#fff; font-weight:800; font-size:13px; cursor:pointer;">Masuk</button>
-    <div id="pinStatus" style="text-align:center; font-size:11px; margin-top:10px; min-height:14px; color:#b3261e;"></div>
-    <div style="text-align:center; margin-top:14px;">
-      <button onclick="usePinLater()" style="border:none; background:none; color:#8a7f6c; font-size:10px; text-decoration:underline; cursor:pointer;">Lanjut tanpa sinkron (mode offline satu device)</button>
+  <div style="width:100%; max-width:320px; background:#fff; border-radius:16px; padding:20px 16px; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
+    <div style="font-size:28px; text-align:center; margin-bottom:4px;">🔒</div>
+    <div style="font-size:15px; font-weight:900; text-align:center; color:#8f080d;">AGE MT. HARYONO</div>
+    <div style="font-size:10px; text-align:center; color:#8a7f6c; margin:2px 0 14px;">Masukkan PIN untuk sinkronisasi data antar device</div>
+    <input id="pinInput" type="password" inputmode="numeric" placeholder="PIN" onkeydown="if(event.key==='Enter'){submitPin();}" style="width:100%; height:40px; border:1px solid #e0d7cb; border-radius:8px; text-align:center; font-size:16px; letter-spacing:4px; font-family:monospace; margin-bottom:8px;">
+    <button id="pinSubmitBtn" onclick="submitPin()" style="width:100%; height:38px; border:none; border-radius:8px; background:linear-gradient(135deg,#d71920,#9e0b11); color:#fff; font-weight:800; font-size:12px; cursor:pointer;">Masuk</button>
+    <div id="pinStatus" style="text-align:center; font-size:10px; margin-top:8px; min-height:12px; color:#b3261e;"></div>
+    <div style="text-align:center; margin-top:12px;">
+      <button onclick="usePinLater()" style="border:none; background:none; color:#8a7f6c; font-size:9px; text-decoration:underline; cursor:pointer;">Lanjut tanpa sinkron (mode offline satu device)</button>
     </div>
   </div>
 </div>
 
-<div id="syncBadge" style="position:fixed; top:8px; left:50%; transform:translateX(-50%); z-index:998; font-size:9px; font-weight:700; padding:4px 10px; border-radius:10px; background:rgba(0,0,0,0.55); color:#fff; display:none;"></div>
-
+<div id="syncBadge" style="position:fixed; top:8px; left:50%; transform:translateX(-50%); z-index:998; font-size:8px; font-weight:700; padding:3px 8px; border-radius:8px; background:rgba(0,0,0,0.65); color:#fff; display:none;"></div>
 
 <div class="app">
 
   <!-- CONTAINER SLIDE HALAMAN -->
   <div class="pages-container" id="pagesContainer">
 
-    <!-- ======================= BERANDA (INDEX 0) ======================= -->
+    <!-- BERANDA (INDEX 0) -->
     <div id="page-beranda" class="page">
       <div class="pagewrap">
 
@@ -367,7 +359,7 @@ td.empty { text-align: center; color: var(--text-sub); padding: 18px 8px; font-s
       </div>
     </div>
 
-    <!-- ======================= STOCK (INDEX 1) ======================= -->
+    <!-- STOCK (INDEX 1) -->
     <div id="page-stock" class="page">
       <div class="pagewrap">
         <div class="header">
@@ -384,7 +376,7 @@ td.empty { text-align: center; color: var(--text-sub); padding: 18px 8px; font-s
       </div>
     </div>
 
-    <!-- ======================= RIWAYAT (INDEX 2) ======================= -->
+    <!-- RIWAYAT (INDEX 2) -->
     <div id="page-riwayat" class="page">
       <div class="pagewrap">
         <div class="header">
@@ -407,8 +399,8 @@ td.empty { text-align: center; color: var(--text-sub); padding: 18px 8px; font-s
           <button class="danger-btn" id="btnHapusPenjualan" onclick="hapusRiwayatPenjualan(this)">🗑️ Hapus Riwayat Penjualan</button>
         </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin: 14px 2px 6px;">
-          <div style="font-weight:800; font-size:13px;">📊 Matrix Stock barang</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin: 12px 2px 4px;">
+          <div style="font-weight:800; font-size:11px;">📊 Matrix Stock barang</div>
           <div class="month-controls">
             <select class="filter-select" id="selectBulanExcel" onchange="renderExcelMatrix()"></select>
             <select class="filter-select" id="selectTahunExcel" onchange="renderExcelMatrix()"></select>
@@ -418,19 +410,19 @@ td.empty { text-align: center; color: var(--text-sub); padding: 18px 8px; font-s
         <div class="item-filter-tabs" id="itemFilterTabs"></div>
         <div id="excelItemSheetsContainer"></div>
 
-        <div class="card" style="padding:14px 16px;">
-          <div style="font-weight:800; font-size:13px; margin-bottom:2px;">💾 Backup Data</div>
-          <div style="font-size:10px; color:var(--text-sub); margin-bottom:10px;">Data hanya tersimpan di HP ini. Export rutin supaya tidak hilang kalau cache browser dibersihkan atau ganti HP.</div>
-          <button class="save" style="margin:0 0 8px; width:100%;" onclick="exportData()">⬇️ Export Data (.json)</button>
+        <div class="card" style="padding:12px;">
+          <div style="font-weight:800; font-size:11px; margin-bottom:2px;">💾 Backup Data</div>
+          <div style="font-size:9px; color:var(--text-sub); margin-bottom:8px;">Data tersimpan di perangkat ini. Export rutin agar aman.</div>
+          <button class="save" style="margin:0 0 6px; width:100%;" onclick="exportData()">⬇️ Export Data (.json)</button>
           <input type="file" id="importFile" accept="application/json" style="display:none;" onchange="importData(event)">
-          <button class="save" style="margin:0; width:100%; background:linear-gradient(135deg,#4a4235,#2c2620);" onclick="document.getElementById('importFile').click()">⬆️ Import Data (.json)</button>
+          <button class="save" style="margin:0; width:100%; background:#342c26;" onclick="document.getElementById('importFile').click()">⬆️ Import Data (.json)</button>
           <div id="backupStatus" class="save-status"></div>
         </div>
 
-        <div class="card" style="padding:14px 16px;">
-          <div style="font-weight:800; font-size:13px; margin-bottom:2px;">🔗 Sinkronisasi Antar Device</div>
-          <div id="syncInfoText" style="font-size:10px; color:var(--text-sub); margin-bottom:10px;">Memeriksa status...</div>
-          <button class="save" style="margin:0; width:100%; background:linear-gradient(135deg,#4a4235,#2c2620);" onclick="logoutDevice()">🚪 Keluar dari Device Ini</button>
+        <div class="card" style="padding:12px;">
+          <div style="font-weight:800; font-size:11px; margin-bottom:2px;">🔗 Sinkronisasi Antar Device</div>
+          <div id="syncInfoText" style="font-size:9px; color:var(--text-sub); margin-bottom:8px;">Memeriksa status...</div>
+          <button class="save" style="margin:0; width:100%; background:#342c26;" onclick="logoutDevice()">🚪 Keluar dari Device Ini</button>
         </div>
 
         <div class="footer"><b>Ayam Guling Enakko</b><br>Pencatatan Stok & Penjualan</div>
@@ -439,20 +431,29 @@ td.empty { text-align: center; color: var(--text-sub); padding: 18px 8px; font-s
 
   </div> <!-- END PAGES CONTAINER -->
 
-  <!-- SEGMENTED BOTTOM NAV BAR -->
-  <nav class="bottomnav">
-    <div class="nav-indicator" id="navIndicator"></div>
-    <button class="navbtn active" data-page="beranda" onclick="gotoPage('beranda', 0)"><span class="nicon">🏠</span>Beranda</button>
-    <button class="navbtn" data-page="stock" onclick="gotoPage('stock', 1)"><span class="nicon">📦</span>Stok</button>
-    <button class="navbtn" data-page="riwayat" onclick="gotoPage('riwayat', 2)"><span class="nicon">🕒</span>Riwayat</button>
-  </nav>
+  <!-- FLOATING BOTTOM NAV BAR CLEAN -->
+  <div class="bottomnav-wrapper">
+    <nav class="bottomnav">
+      <div class="nav-indicator" id="navIndicator"></div>
+      <button class="navbtn active" data-page="beranda" onclick="gotoPage('beranda', 0)">
+        <span class="nicon">🏠</span>
+        <span>Beranda</span>
+      </button>
+      <button class="navbtn" data-page="stock" onclick="gotoPage('stock', 1)">
+        <span class="nicon">📦</span>
+        <span>Stok</span>
+      </button>
+      <button class="navbtn" data-page="riwayat" onclick="gotoPage('riwayat', 2)">
+        <span class="nicon">🕒</span>
+        <span>Riwayat</span>
+      </button>
+    </nav>
+  </div>
 
 </div>
 
 <script>
-/* =========================
-   KONFIGURASI ITEM STOCK
-========================= */
+/* KONFIGURASI ITEM STOCK */
 const STOCK_ITEMS = [
   { id:'ayam',           nama:'Ayam',              unit:'ekor',  icon:'🐔', color:'#d71920' },
   { id:'berasPutih',     nama:'Beras Putih',       unit:'kg',    icon:'🍚', color:'#c9a227' },
@@ -469,9 +470,7 @@ let stockChartInstance = null;
 let confirmDeleteP = false;
 let selectedFilterItem = 'all';
 
-/* =========================
-   STORAGE HELPERS
-========================= */
+/* STORAGE HELPERS */
 function loadJSON(key, fallback) {
   try {
     const val = localStorage.getItem(key);
@@ -487,9 +486,7 @@ function saveJSON(key, value) {
   if (SYNCED_KEYS.indexOf(key) !== -1) queuePush();
 }
 
-/* =========================
-   SINKRONISASI MULTI-DEVICE (Cloudflare Pages Functions + D1)
-========================= */
+/* SINKRONISASI MULTI-DEVICE */
 let syncEnabled = false;
 let lastSyncedAt = 0;
 let pushTimer = null;
@@ -595,7 +592,7 @@ async function pullState(silent) {
     if (res.status === 401) { syncEnabled = false; showPinOverlayAgain('PIN tidak valid lagi. Masuk ulang.'); return; }
     var data = await res.json();
     if (!data.value || data.updatedAt <= lastSyncedAt) return;
-    if (isTyping) return; // jangan timpa sementara user lagi ngetik
+    if (isTyping) return;
 
     var parsed = JSON.parse(data.value);
     if (parsed.stockState) { stockState = parsed.stockState; localStorage.setItem('stock-state', JSON.stringify(parsed.stockState)); }
@@ -610,7 +607,7 @@ async function pullState(silent) {
     syncPenusukanDenganAyam();
     if (!silent) setSyncBadge('✓ Data diperbarui dari device lain', true);
     setTimeout(function () { setSyncBadge('', false); }, 2000);
-  } catch (e) { /* offline, diamkan saja */ }
+  } catch (e) {}
 }
 
 function showPinOverlayAgain(message) {
@@ -670,10 +667,7 @@ function logoutDevice() {
   document.getElementById('pinOverlay').style.display = 'flex';
 }
 
-
-/* =========================
-   UPLOAD BANNER / FOTO
-========================= */
+/* UPLOAD BANNER */
 function uploadBanner(event) {
   const file = event.target.files[0];
   if (file) {
@@ -701,9 +695,7 @@ function loadBannerImage() {
   if (savedImg) setBannerImage(savedImg);
 }
 
-/* =========================
-   UTIL
-========================= */
+/* UTIL */
 function hitungEkspresi(val) {
   if (!val) return 0;
   if (typeof val === 'number') return val;
@@ -742,17 +734,12 @@ function tampilTanggal() {
   document.getElementById("tanggal").textContent = hari[d.getDay()] + ", " + d.getDate() + " " + bulan[d.getMonth()] + " " + d.getFullYear();
 }
 
-/* =========================
-   SLIDE NAVIGASI & INDICATOR HALAMAN
-========================= */
+/* NAVIGASI SLIDE */
 function gotoPage(name, pageIndex) {
   const container = document.getElementById('pagesContainer');
   const indicator = document.getElementById('navIndicator');
   
-  // Geser Halaman
   container.style.transform = `translateX(-${pageIndex * 33.3333}%)`;
-  
-  // Geser Indikator Tab
   indicator.style.transform = `translateX(${pageIndex * 100}%)`;
 
   document.querySelectorAll('.navbtn').forEach(b => {
@@ -764,9 +751,7 @@ function gotoPage(name, pageIndex) {
   }
 }
 
-/* =========================
-   PENJUALAN AYAM
-========================= */
+/* PENJUALAN AYAM */
 function ubah(id, nilai) {
   var input = document.getElementById(id);
   var hasil = hitungEkspresi(input.value) + nilai;
@@ -830,15 +815,13 @@ function simpanPenjualan() {
   renderRiwayatPenjualan();
 }
 
-/* =========================
-   STOCK ITEM FORM INPUT
-========================= */
+/* STOCK ITEM INPUT */
 function renderStockInputs() {
   var container = document.getElementById('stockCards');
   container.innerHTML = STOCK_ITEMS.map(function (item) {
     var s = stockState[item.id] || { awal: 0, masuk: 0, akhir: 0, keluar: 0, keterangan: '' };
     return '<div class="card">' +
-      '<div class="card-head"><div class="card-head-left"><div class="icon" style="background:' + item.color + '22">' + item.icon + '</div>' +
+      '<div class="card-head"><div class="card-head-left"><div class="icon" style="background:' + item.color + '15">' + item.icon + '</div>' +
       '<div><h2>' + item.nama + '</h2><span>Satuan: ' + item.unit + '</span></div></div></div>' +
       '<div class="stock-body">' +
         '<div class="stock-line"><div class="stock-label">Stok Awal</div>' +
@@ -904,9 +887,7 @@ function syncPenusukanDenganAyam() {
   }
 }
 
-/* =========================
-   EKSEKUSI LANGSUNG STOK AKHIR KE STOK AWAL
-========================= */
+/* EKSEKUSI STOK AKHIR KE STOK AWAL */
 function simpanStockItem(itemId) {
   var item = STOCK_ITEMS.find(function (i) { return i.id === itemId; });
   if (!item) return;
@@ -927,7 +908,7 @@ function simpanStockItem(itemId) {
   renderStockInputs();
   renderExcelMatrix();
   
-  document.getElementById('stockSaveStatus').textContent = '✓ ' + item.nama + ' tersimpan & dieksekusi ke Stok Awal!';
+  document.getElementById('stockSaveStatus').textContent = '✓ ' + item.nama + ' tersimpan!';
   renderChart();
 }
 
@@ -950,13 +931,11 @@ function simpanSemuaStock() {
   renderStockInputs();
   renderExcelMatrix();
   
-  document.getElementById('stockSaveStatus').textContent = '✓ Semua stok tersimpan & dieksekusi ke Stok Awal!';
+  document.getElementById('stockSaveStatus').textContent = '✓ Semua stok tersimpan!';
   renderChart();
 }
 
-/* =========================
-   DIAGRAM STOCK (BERANDA)
-========================= */
+/* DIAGRAM STOCK */
 function renderChart() {
   var canvas = document.getElementById('stockChart');
   if (!canvas || typeof Chart === 'undefined') return;
@@ -973,13 +952,13 @@ function renderChart() {
   } else {
     stockChartInstance = new Chart(canvas, {
       type: 'bar',
-      data: { labels: labels, datasets: [{ label: 'Stok saat ini', data: data, backgroundColor: colors, borderRadius: 6, maxBarThickness: 18 }] },
+      data: { labels: labels, datasets: [{ label: 'Stok saat ini', data: data, backgroundColor: colors, borderRadius: 4, maxBarThickness: 14 }] },
       options: {
         indexAxis: 'y', responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          x: { beginAtZero: true, grid: { color: '#eee9df' }, ticks: { font: { size: 9 } } },
-          y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+          x: { beginAtZero: true, grid: { color: '#eee9df' }, ticks: { font: { size: 8 } } },
+          y: { grid: { display: false }, ticks: { font: { size: 9 } } }
         }
       }
     });
@@ -999,9 +978,7 @@ function escapeHTML(value) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
-/* =========================
-   FILTER TABS LOGIC
-========================= */
+/* FILTER TABS */
 function renderFilterTabs() {
   const container = document.getElementById('itemFilterTabs');
   if (!container) return;
@@ -1018,9 +995,7 @@ function filterMatrixItem(itemId) {
   renderExcelMatrix();
 }
 
-/* =========================
-   MATRIX SHEET BERANTAI REALTIME
-========================= */
+/* MATRIX SHEET */
 function initExcelDropdowns() {
   const selectBulan = document.getElementById('selectBulanExcel');
   const selectTahun = document.getElementById('selectTahunExcel');
@@ -1111,7 +1086,7 @@ function renderExcelMatrix() {
     : STOCK_ITEMS.filter(i => i.id === selectedFilterItem);
 
   if (itemsToRender.length === 0) {
-    container.innerHTML = '<div style="text-align:center; padding:20px; color:#888;">Kosong.</div>';
+    container.innerHTML = '<div style="text-align:center; padding:16px; color:#888;">Kosong.</div>';
     return;
   }
 
@@ -1120,11 +1095,11 @@ function renderExcelMatrix() {
     const itemData = monthData[item.id] || {};
 
     let theadHtml = `<tr>
-      <th style="width:35px;">Tgl</th>
-      <th style="width:60px;">Awal</th>
-      <th style="width:60px;">Masuk</th>
-      <th style="width:60px;">Keluar</th>
-      <th style="width:60px;">Akhir</th>
+      <th style="width:30px;">Tgl</th>
+      <th style="width:50px;">Awal</th>
+      <th style="width:50px;">Masuk</th>
+      <th style="width:50px;">Keluar</th>
+      <th style="width:50px;">Akhir</th>
       <th>Ket</th>
     </tr>`;
 
@@ -1160,10 +1135,10 @@ function renderExcelMatrix() {
       <td>—</td><td>—</td>
     </tr>`;
 
-    return `<div class="card" style="margin-bottom:12px;">
+    return `<div class="card" style="margin-bottom:10px;">
       <div class="card-head">
         <div class="card-head-left">
-          <div class="icon" style="background:${item.color}22">${item.icon}</div>
+          <div class="icon" style="background:${item.color}15">${item.icon}</div>
           <div><h2>${item.nama}</h2><span>Satuan: ${item.unit}</span></div>
         </div>
       </div>
@@ -1212,9 +1187,7 @@ function onMatrixCellChange(input, year, month, itemId, day, fieldKey) {
   renderExcelMatrix();
 }
 
-/* =========================
-   BACKUP / RESTORE DATA
-========================= */
+/* BACKUP / RESTORE DATA */
 function exportData() {
   var payload = {
     exportedAt: new Date().toISOString(),
@@ -1250,7 +1223,7 @@ function importData(event) {
       var data = payload && payload.data ? payload.data : payload;
       if (!data || typeof data !== 'object') throw new Error('Format tidak valid');
 
-      if (!confirm('Import akan MENIMPA data penjualan, stok, dan matrix yang ada sekarang di HP ini. Lanjutkan?')) {
+      if (!confirm('Import akan MENIMPA data yang ada. Lanjutkan?')) {
         status.textContent = 'Import dibatalkan.';
         event.target.value = '';
         return;
@@ -1270,7 +1243,7 @@ function importData(event) {
       renderChart();
       syncPenusukanDenganAyam();
 
-      status.textContent = '✓ Data berhasil di-import · ' + formatTanggalPendek(new Date());
+      status.textContent = '✓ Data berhasil di-import!';
     } catch (err) {
       status.textContent = '✗ Gagal import: file tidak valid';
       console.error(err);
@@ -1280,9 +1253,7 @@ function importData(event) {
   reader.readAsText(file);
 }
 
-/* =========================
-   RIWAYAT PENJUALAN
-========================= */
+/* RIWAYAT PENJUALAN */
 function renderRiwayatPenjualan() {
   var tbodyP = document.getElementById('tbodyPenjualan');
   if (riwayatPenjualan.length === 0) {
@@ -1291,7 +1262,7 @@ function renderRiwayatPenjualan() {
     tbodyP.innerHTML = riwayatPenjualan.map(function (r) {
       var warna = r.selisih < 0 ? '#b3261e' : (r.selisih > 0 ? '#a36b00' : '#137333');
       var tanda = r.selisih > 0 ? '+' : '';
-      return '<tr><td style="padding:4px 6px;">' + r.tanggalLabel + '</td><td>' + format(r.utuh) + '</td><td>' + format(r.setengah) + '</td>' +
+      return '<tr><td style="padding:4px 4px;">' + r.tanggalLabel + '</td><td>' + format(r.utuh) + '</td><td>' + format(r.setengah) + '</td>' +
         '<td>' + format(r.seperempat) + '</td><td><b>' + format(r.total) + '</b></td><td>' + format(r.penusukan) + '</td>' +
         '<td style="color:' + warna + '; font-weight:bold;">' + tanda + format(r.selisih) + '</td><td>' +
         (r.keterangan ? escapeHTML(r.keterangan) : '<span style="color:#aaa">—</span>') + '</td></tr>';
@@ -1313,9 +1284,7 @@ function hapusRiwayatPenjualan(btn) {
   renderRiwayatPenjualan();
 }
 
-/* =========================
-   INPUT OTOMATIS PENJUALAN
-========================= */
+/* INPUT OTOMATIS */
 document.querySelectorAll('#page-beranda input').forEach(function (input) {
   input.addEventListener('input', hitungPenjualan);
   input.addEventListener('keyup', hitungPenjualan);
@@ -1327,9 +1296,7 @@ document.querySelectorAll('#page-beranda input').forEach(function (input) {
   });
 });
 
-/* =========================
-   INIT
-========================= */
+/* INIT */
 function init() {
   tampilTanggal();
   initExcelDropdowns();
