@@ -1,0 +1,16 @@
+{
+  "name": "AGE MT. Haryono - Kalkulator Penjualan & Stok",
+  "short_name": "AGE MT. Haryono",
+  "description": "Kalkulator penjualan dan pencatatan stok Ayam Guling Enakko MT. Haryono",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0102",
+  "theme_color": "#8f080d",
+  "lang": "id",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

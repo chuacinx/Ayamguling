@@ -1,0 +1,20 @@
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Robots-Tag: noindex, nofollow
+
+/sw.js
+  Cache-Control: no-cache
+
+/manifest.json
+  Cache-Control: public, max-age=86400
+
+/icon-192.png
+  Cache-Control: public, max-age=604800, immutable
+
+/icon-512.png
+  Cache-Control: public, max-age=604800, immutable
+
+/apple-touch-icon.png
+  Cache-Control: public, max-age=604800, immutable

@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="Kalkulator penjualan dan pencatatan stok Ayam Guling Enakko MT. Haryono">
+<meta name="theme-color" content="#8f080d">
+<meta name="color-scheme" content="light">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AGE MT. Haryono">
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>AGE MT. HARYONO - Modern Tab</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --primary-red: #d71920;
+  --dark-red: #8f080d;
+  --gold: #ffc837;
+  --bg-app: #f6f3ed;
+  --surface: #ffffff;
+  --text-main: #1f1a17;
+  --text-sub: #8a7f6c;
+  --border: #e8e2d5;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  margin: 0; background: #0a0102; color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  display: flex; justify-content: center;
+}
+
+.app {
+  width: 100%; max-width: 430px; min-height: 100vh;
+  background: var(--bg-app); position: relative; padding-bottom: 85px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6); overflow-x: hidden;
+}
+
+/* ========= SLIDE PAGE TRANSITION ========= */
+.pages-container {
+  display: flex;
+  width: 300%;
+  min-height: calc(100vh - 85px);
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.page {
+  width: 33.3333%;
+  flex-shrink: 0;
+  display: block !important;
+  opacity: 1;
+}
+
+.pagewrap { padding: 16px 14px 24px; }
+
+/* ========= BANNER DEDICATED ========= */
+.banner {
+  width: 100%; height: 150px; border-radius: 20px;
+  overflow: hidden; position: relative; margin-bottom: 14px;
+  box-shadow: 0 8px 24px rgba(143, 8, 13, 0.3);
+  background: linear-gradient(135deg, #d71920 0%, #9e0b11 50%, #4a0205 100%);
+  background-size: cover; background-position: center;
+  display: flex; align-items: flex-end; padding: 16px 18px;
+  border: 1px solid rgba(255, 200, 55, 0.4);
+  cursor: pointer;
+}
+
+.banner-overlay {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(15, 2, 3, 0.8) 100%);
+  z-index: 1;
+}
+
+.banner .b-text { position: relative; z-index: 2; color: #fff; width: 100%; }
+.banner .b-title {
+  font-size: 21px; font-weight: 900; letter-spacing: -0.3px;
+  background: linear-gradient(45deg, #ffffff, #ffe399);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.banner .b-sub { font-size: 11px; color: var(--gold); font-weight: 700; margin-top: 2px; text-transform: uppercase; }
+
+.upload-hint {
+  position: absolute; top: 10px; right: 10px; z-index: 2;
+  font-size: 9px; color: #fff; background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* ========= HEADER ========= */
+.header { margin-bottom: 14px; }
+.header h1 { margin: 0; font-size: 22px; font-weight: 900; color: var(--dark-red); letter-spacing: -0.5px; }
+.header p { margin: 3px 0 0; color: var(--text-sub); font-size: 11px; font-weight: 500; }
+
+.section-title {
+  font-size: 12px; font-weight: 800; color: var(--text-main);
+  margin: 16px 2px 8px; display: flex; justify-content: space-between; align-items: center;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.section-title small { font-weight: 500; color: var(--text-sub); text-transform: none; font-size: 10px; }
+
+/* ========= CARDS ========= */
+.card {
+  background: var(--surface); border-radius: 18px; margin-bottom: 14px;
+  border: 1px solid var(--border); overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+}
+
+.card-head {
+  padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #f2ede4; background: linear-gradient(90deg, #fffcf7, #ffffff);
+}
+.card-head-left { display: flex; align-items: center; gap: 10px; }
+.icon {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: linear-gradient(135deg, #fff5dc, #ffeaaf);
+  display: flex; justify-content: center; align-items: center;
+  font-size: 16px; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(212,154,0,0.15);
+}
+.card-head h2 { margin: 0; font-size: 14px; font-weight: 800; color: var(--text-main); }
+.card-head span { display: block; color: var(--text-sub); font-size: 10px; }
+
+/* ========= FORM & STEPPERS ========= */
+.sale-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; border-top: 1px solid #f5f0e6; }
+.sale-row:first-child { border-top: none; }
+.sale-name { font-size: 13px; font-weight: 700; color: #2c2520; }
+.sale-name small { display: block; color: var(--text-sub); font-size: 10px; font-weight: 500; margin-top: 2px; }
+
+.stepper { display: flex; align-items: center; gap: 8px; }
+.stepper button {
+  width: 32px; height: 32px; border-radius: 9px; border: 1px solid #e0d7cb;
+  background: #fff; font-size: 16px; font-weight: bold; cursor: pointer; color: #332c27;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03); transition: transform 0.1s;
+}
+.stepper button:active { transform: scale(0.92); }
+.stepper .plus {
+  background: linear-gradient(135deg, #d71920, #9e0b11);
+  border: none; color: white; box-shadow: 0 3px 8px rgba(215,25,32,0.3);
+}
+.stepper input {
+  width: 75px; height: 32px; border: 1px solid #e0d7cb; border-radius: 9px;
+  text-align: center; font-family: monospace; font-size: 14px; font-weight: 800; background: #fdfbf7;
+}
+
+.sale-total {
+  background: linear-gradient(135deg, #1f1a17, #342c26); color: white;
+  padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;
+}
+.sale-total span { font-size: 10px; font-weight: 700; letter-spacing: 0.5px; color: #d1c7b7; }
+.sale-total strong { font-family: monospace; font-size: 21px; color: var(--gold); }
+
+.penusukan { padding: 14px 16px; background: #fffdf5; border-top: 2px dashed #f0e3bf; }
+.penusukan-top { display: flex; justify-content: space-between; align-items: center; }
+.penusukan-title { font-size: 12px; font-weight: 800; }
+.penusukan-title small { display: block; color: var(--text-sub); font-weight: 500; font-size: 10px; margin-top: 1px; }
+.penusukan-input { width: 78px; height: 34px; border: 1px solid #dcd0b9; border-radius: 9px; text-align: center; font-family: monospace; font-size: 14px; font-weight: 800; background: #fff; }
+
+.difference { margin-top: 10px; padding: 10px 14px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; }
+.difference-label { font-size: 10px; font-weight: 800; }
+.difference-desc { font-size: 9px; opacity: 0.8; }
+.difference-number { font-family: monospace; font-size: 18px; font-weight: 800; }
+
+.sale-note { padding: 12px 16px; border-top: 1px solid #f5f0e6; }
+.sale-note label { display: block; margin-bottom: 5px; font-size: 10px; color: var(--text-sub); font-weight: 700; }
+.sale-note input { width: 100%; height: 36px; border: 1px solid #e0d7cb; border-radius: 9px; padding: 0 10px; font-size: 11px; background: #fdfbf7; outline: none; }
+
+.sale-save, .save {
+  height: 40px; border-radius: 11px; border: none;
+  background: linear-gradient(135deg, #d71920 0%, #9e0b11 100%);
+  color: #fff; font-weight: 700; font-size: 12px; width: calc(100% - 32px);
+  margin: 10px 16px 14px; cursor: pointer; box-shadow: 0 4px 14px rgba(215,25,32,0.3);
+}
+
+/* ========= STOCK FORM ========= */
+.stock-body { padding: 0 16px 14px; }
+.stock-line { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #f5f0e6; }
+.stock-label { font-size: 12px; font-weight: 600; }
+.number-input { width: 78px; height: 32px; border: 1px solid #e0d7cb; border-radius: 7px; text-align: center; font-family: monospace; font-weight: 800; font-size: 13px; }
+.stock-total { margin-top: 12px; padding: 11px 14px; border-radius: 10px; background: #1f1a17; color: white; display: flex; align-items: center; justify-content: space-between; }
+.stock-total label { font-size: 10px; font-weight: 800; color: var(--gold); }
+.stock-total-input-wrap { display: flex; align-items: center; gap: 6px; }
+.stock-total-input { width: 78px; height: 32px; border: 1px solid rgba(255,255,255,0.25); border-radius: 7px; text-align: center; font-family: monospace; font-weight: 800; font-size: 14px; background: rgba(255,255,255,0.12); color: #fff; }
+.stock-unit-label { font-size: 11px; font-weight: 700; }
+.note-input { width: 100%; height: 34px; border: 1px solid #e0d7cb; border-radius: 7px; padding: 0 10px; font-size: 11px; margin-top: 10px; }
+.stock-item-save { width: 100%; margin: 12px 0 0; height: 36px; }
+.stock-actions { padding: 0 4px 10px; }
+.stock-actions .save { width: 100%; margin: 0; }
+.save-status { text-align: center; font-size: 10px; font-weight: 600; color: var(--text-sub); min-height: 14px; padding-bottom: 4px; }
+
+/* ========= CHART & TABLES ========= */
+.chart-card { padding: 16px; }
+.chart-wrap { height: 190px; position: relative; margin-top: 6px; }
+.legend-list { margin-top: 12px; display: flex; flex-direction: column; gap: 7px; }
+.legend-row { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.legend-name { flex: 1; color: #4a4235; font-weight: 600; }
+.legend-val { font-family: monospace; font-weight: 800; }
+
+.item-filter-tabs { display: flex; gap: 6px; overflow-x: auto; padding: 4px 2px 10px; scrollbar-width: none; }
+.item-filter-tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  white-space: nowrap; background: #fff; border: 1px solid #e0d7cb; border-radius: 16px;
+  padding: 6px 14px; font-size: 11px; font-weight: 700; color: #554e42; cursor: pointer;
+}
+.tab-btn.active { background: linear-gradient(135deg, #d71920, #9e0b11); color: #fff; border-color: #d71920; }
+
+.riwayat-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; }
+.riwayat-head h2 { margin: 0; font-size: 14px; font-weight: 800; }
+.month-controls { display: flex; align-items: center; gap: 4px; }
+.filter-select { border: 1px solid #dcd3c4; border-radius: 6px; font-size: 10px; font-weight: 600; padding: 4px 6px; background: #fff; }
+
+.table-scroll { overflow-x: auto; padding-bottom: 2px; }
+table.excel-table { border-collapse: collapse; width: 100%; font-size: 11px; background: #fff; }
+table.excel-table th { background: #f6f3eb; color: #4a4235; font-weight: 800; padding: 6px 4px; border: 1px solid #e2dad0; text-align: center; }
+table.excel-table td { padding: 0; border: 1px solid #eee7dc; text-align: center; height: 28px; }
+table.excel-table tr:nth-child(even) td { background-color: #faf8f5; }
+
+.cell-input { width: 100%; height: 100%; border: none; background: transparent; text-align: center; font-family: monospace; font-size: 11px; font-weight: 600; outline: none; }
+.cell-input:focus { background: #fff3d1; }
+.cell-input.text-left { text-align: left; padding: 0 6px; font-family: inherit; }
+.excel-total-row td { background: #efebe4 !important; font-weight: bold; font-family: monospace; padding: 6px 4px; }
+td.empty { text-align: center; color: var(--text-sub); padding: 18px 8px; font-size: 11px; }
+.danger-btn { margin: 10px 16px; height: 34px; border-radius: 8px; border: 1px solid #f0c9c5; background: #fdf3f1; color: #b3261e; font-size: 11px; font-weight: 700; cursor: pointer; width: calc(100% - 32px); }
+
+/* ========= DESAIN SEGMENTED TAB BARU (MODERN SLIDE TAB) ========= */
+.bottomnav {
+  position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 24px); max-width: 400px;
+  background: #180304;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 200, 55, 0.35);
+  display: flex; z-index: 100; padding: 4px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.5);
+}
+
+/* Indicator Kapsul Emas Geser */
+.nav-indicator {
+  position: absolute; top: 4px; bottom: 4px; left: 4px;
+  width: calc((100% - 8px) / 3);
+  background: linear-gradient(135deg, #d71920 0%, #a30c12 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(215, 25, 32, 0.4);
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 1;
+}
+
+.navbtn {
+  flex: 1; border: none; background: none; padding: 10px 0;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  cursor: pointer; color: #a89d89; font-size: 12px; font-weight: 800;
+  position: relative; z-index: 2; transition: color 0.3s;
+}
+
+.navbtn .nicon { font-size: 16px; }
+.navbtn.active { color: #ffffff; }
+
+.footer { text-align: center; padding: 10px; color: var(--text-sub); font-size: 10px; }
+.footer b { color: var(--primary-red); }
+</style>
+</head>
+<body>
+
+<!-- ===== OVERLAY PIN (gerbang sinkronisasi multi-device) ===== -->
+<div id="pinOverlay" style="position:fixed; inset:0; background:#0a0102; z-index:999; display:flex; align-items:center; justify-content:center; padding:20px;">
+  <div style="width:100%; max-width:340px; background:#fff; border-radius:18px; padding:24px 20px; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
+    <div style="font-size:34px; text-align:center; margin-bottom:6px;">🔒</div>
+    <div style="font-size:16px; font-weight:900; text-align:center; color:#8f080d;">AGE MT. HARYONO</div>
+    <div style="font-size:11px; text-align:center; color:#8a7f6c; margin:4px 0 16px;">Masukkan PIN untuk sinkronisasi data antar device</div>
+    <input id="pinInput" type="password" inputmode="numeric" placeholder="PIN" onkeydown="if(event.key==='Enter'){submitPin();}" style="width:100%; height:44px; border:1px solid #e0d7cb; border-radius:10px; text-align:center; font-size:18px; letter-spacing:4px; font-family:monospace; margin-bottom:10px;">
+    <button id="pinSubmitBtn" onclick="submitPin()" style="width:100%; height:42px; border:none; border-radius:10px; background:linear-gradient(135deg,#d71920,#9e0b11); color:#fff; font-weight:800; font-size:13px; cursor:pointer;">Masuk</button>
+    <div id="pinStatus" style="text-align:center; font-size:11px; margin-top:10px; min-height:14px; color:#b3261e;"></div>
+    <div style="text-align:center; margin-top:14px;">
+      <button onclick="usePinLater()" style="border:none; background:none; color:#8a7f6c; font-size:10px; text-decoration:underline; cursor:pointer;">Lanjut tanpa sinkron (mode offline satu device)</button>
+    </div>
+  </div>
+</div>
+
+<div id="syncBadge" style="position:fixed; top:8px; left:50%; transform:translateX(-50%); z-index:998; font-size:9px; font-weight:700; padding:4px 10px; border-radius:10px; background:rgba(0,0,0,0.55); color:#fff; display:none;"></div>
+
+
+<div class="app">
+
+  <!-- CONTAINER SLIDE HALAMAN -->
+  <div class="pages-container" id="pagesContainer">
+
+    <!-- ======================= BERANDA (INDEX 0) ======================= -->
+    <div id="page-beranda" class="page">
+      <div class="pagewrap">
+
+        <div class="banner" id="bannerCard" onclick="document.getElementById('inputBanner').click()">
+          <div class="banner-overlay" id="bannerOverlay" style="display:none;"></div>
+          <div class="b-text">
+            <div class="b-title">Ayam Guling Enakko</div>
+            <div class="b-sub" id="tanggal">Memuat tanggal...</div>
+          </div>
+          <div class="upload-hint">📷 Ubah Foto</div>
+          <input type="file" id="inputBanner" accept="image/*" style="display:none;" onchange="uploadBanner(event)">
+        </div>
+
+        <div class="header">
+          <h1>AGE MT. HARYONO</h1>
+          <p>Kalkulator penjualan & ringkasan stok hari ini</p>
+        </div>
+
+        <div class="section-title">🧮 Kalkulator Penjualan <small>Hitung & simpan</small></div>
+        <div class="card">
+          <div class="sale-row">
+            <div class="sale-name">Ekor Utuh<small>1 ekor</small></div>
+            <div class="stepper">
+              <button onclick="ubah('utuh', -1)">−</button>
+              <input id="utuh" type="text" value="0" placeholder="0">
+              <button class="plus" onclick="ubah('utuh', 1)">+</button>
+            </div>
+          </div>
+          <div class="sale-row">
+            <div class="sale-name">Setengah<small>½ ekor</small></div>
+            <div class="stepper">
+              <button onclick="ubah('setengah', -1)">−</button>
+              <input id="setengah" type="text" value="0" placeholder="0">
+              <button class="plus" onclick="ubah('setengah', 1)">+</button>
+            </div>
+          </div>
+          <div class="sale-row">
+            <div class="sale-name">Seperempat<small>¼ ekor</small></div>
+            <div class="stepper">
+              <button onclick="ubah('seperempat', -1)">−</button>
+              <input id="seperempat" type="text" value="0" placeholder="0">
+              <button class="plus" onclick="ubah('seperempat', 1)">+</button>
+            </div>
+          </div>
+          <div class="sale-total">
+            <span>TOTAL PENJUALAN</span>
+            <strong id="totalPenjualan">0 ekor</strong>
+          </div>
+          <div class="penusukan">
+            <div class="penusukan-top">
+              <div class="penusukan-title">🔪 Ayam Penusukan<small>Otomatis dari Ayam Terpakai</small></div>
+              <input id="penusukan" class="penusukan-input" type="text" value="0" placeholder="0">
+            </div>
+            <div id="difference" class="difference">
+              <div>
+                <div id="differenceLabel" class="difference-label">SELISIH</div>
+                <div id="differenceDesc" class="difference-desc">Penjualan vs penusukan</div>
+              </div>
+              <div id="differenceNumber" class="difference-number">0 ekor</div>
+            </div>
+          </div>
+          <div class="sale-note">
+            <label for="salesNote">Keterangan Penjualan</label>
+            <input id="salesNote" class="note-input" type="text" maxlength="200" placeholder="Keterangan opsional">
+          </div>
+          <button class="sale-save" onclick="simpanPenjualan()">💾 Simpan Penjualan Hari Ini</button>
+          <div id="salesSaveStatus" class="save-status"></div>
+        </div>
+
+        <div class="section-title">📊 Stock Barang <small>Posisi stok terkini</small></div>
+        <div class="card chart-card">
+          <div class="chart-wrap"><canvas id="stockChart"></canvas></div>
+          <div class="legend-list" id="legendList"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ======================= STOCK (INDEX 1) ======================= -->
+    <div id="page-stock" class="page">
+      <div class="pagewrap">
+        <div class="header">
+          <h1>Stok Barang Hari Ini</h1>
+          <p>Catat stok fisik tiap item</p>
+        </div>
+
+        <div id="stockCards"></div>
+
+        <div class="stock-actions">
+          <button class="save" onclick="simpanSemuaStock()">💾 Simpan Semua Stok Ke Matrix</button>
+        </div>
+        <div id="stockSaveStatus" class="save-status"></div>
+      </div>
+    </div>
+
+    <!-- ======================= RIWAYAT (INDEX 2) ======================= -->
+    <div id="page-riwayat" class="page">
+      <div class="pagewrap">
+        <div class="header">
+          <h1>Riwayat & Matrix Excel</h1>
+          <p>Data penjualan & stok berantai</p>
+        </div>
+
+        <div class="card">
+          <div class="riwayat-head"><h2>🧮 Riwayat Penjualan Ayam</h2></div>
+          <div class="table-scroll">
+            <table class="excel-table" style="min-width: 100%;">
+              <thead>
+                <tr>
+                  <th>Tanggal</th><th>Utuh</th><th>½</th><th>¼</th><th>Total</th><th>Tusuk</th><th>Selisih</th><th>Ket</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyPenjualan"></tbody>
+            </table>
+          </div>
+          <button class="danger-btn" id="btnHapusPenjualan" onclick="hapusRiwayatPenjualan(this)">🗑️ Hapus Riwayat Penjualan</button>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin: 14px 2px 6px;">
+          <div style="font-weight:800; font-size:13px;">📊 Matrix Stok Realtime Berantai</div>
+          <div class="month-controls">
+            <select class="filter-select" id="selectBulanExcel" onchange="renderExcelMatrix()"></select>
+            <select class="filter-select" id="selectTahunExcel" onchange="renderExcelMatrix()"></select>
+          </div>
+        </div>
+
+        <div class="item-filter-tabs" id="itemFilterTabs"></div>
+        <div id="excelItemSheetsContainer"></div>
+
+        <div class="card" style="padding:14px 16px;">
+          <div style="font-weight:800; font-size:13px; margin-bottom:2px;">💾 Backup Data</div>
+          <div style="font-size:10px; color:var(--text-sub); margin-bottom:10px;">Data hanya tersimpan di HP ini. Export rutin supaya tidak hilang kalau cache browser dibersihkan atau ganti HP.</div>
+          <button class="save" style="margin:0 0 8px; width:100%;" onclick="exportData()">⬇️ Export Data (.json)</button>
+          <input type="file" id="importFile" accept="application/json" style="display:none;" onchange="importData(event)">
+          <button class="save" style="margin:0; width:100%; background:linear-gradient(135deg,#4a4235,#2c2620);" onclick="document.getElementById('importFile').click()">⬆️ Import Data (.json)</button>
+          <div id="backupStatus" class="save-status"></div>
+        </div>
+
+        <div class="card" style="padding:14px 16px;">
+          <div style="font-weight:800; font-size:13px; margin-bottom:2px;">🔗 Sinkronisasi Antar Device</div>
+          <div id="syncInfoText" style="font-size:10px; color:var(--text-sub); margin-bottom:10px;">Memeriksa status...</div>
+          <button class="save" style="margin:0; width:100%; background:linear-gradient(135deg,#4a4235,#2c2620);" onclick="logoutDevice()">🚪 Keluar dari Device Ini</button>
+        </div>
+
+        <div class="footer"><b>Ayam Guling Enakko</b><br>Pencatatan Stok & Penjualan</div>
+      </div>
+    </div>
+
+  </div> <!-- END PAGES CONTAINER -->
+
+  <!-- SEGMENTED BOTTOM NAV BAR -->
+  <nav class="bottomnav">
+    <div class="nav-indicator" id="navIndicator"></div>
+    <button class="navbtn active" data-page="beranda" onclick="gotoPage('beranda', 0)"><span class="nicon">🏠</span>Beranda</button>
+    <button class="navbtn" data-page="stock" onclick="gotoPage('stock', 1)"><span class="nicon">📦</span>Stok</button>
+    <button class="navbtn" data-page="riwayat" onclick="gotoPage('riwayat', 2)"><span class="nicon">🕒</span>Riwayat</button>
+  </nav>
+
+</div>
+
+<script>
+/* =========================
+   KONFIGURASI ITEM STOCK
+========================= */
+const STOCK_ITEMS = [
+  { id:'ayam',           nama:'Ayam',              unit:'ekor',  icon:'🐔', color:'#d71920' },
+  { id:'berasPutih',     nama:'Beras Putih',       unit:'kg',    icon:'🍚', color:'#c9a227' },
+  { id:'berasBasmati',   nama:'Beras Basmati',     unit:'kg',    icon:'🌾', color:'#8a6d3b' },
+  { id:'oli',            nama:'Oliv oil',          unit:'liter', icon:'🛢️', color:'#3f6b4a' },
+  { id:'airMineral',     nama:'Air Mineral',       unit:'botol', icon:'💧', color:'#2f7d9e' },
+  { id:'tehBotolSosro',  nama:'Teh Botol Sosro',   unit:'botol', icon:'🍵', color:'#a35b1f' },
+];
+
+let stockState = {};
+let excelMatrixData = {}; 
+let riwayatPenjualan = [];
+let stockChartInstance = null;
+let confirmDeleteP = false;
+let selectedFilterItem = 'all';
+
+/* =========================
+   STORAGE HELPERS
+========================= */
+function loadJSON(key, fallback) {
+  try {
+    const val = localStorage.getItem(key);
+    return val ? JSON.parse(val) : fallback;
+  } catch (e) { return fallback; }
+}
+
+const SYNCED_KEYS = ['stock-state', 'excel-matrix-data', 'riwayat-penjualan'];
+
+function saveJSON(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } 
+  catch (e) { console.error('Gagal menyimpan:', key, e); }
+  if (SYNCED_KEYS.indexOf(key) !== -1) queuePush();
+}
+
+/* =========================
+   SINKRONISASI MULTI-DEVICE (Cloudflare Pages Functions + D1)
+========================= */
+let syncEnabled = false;
+let lastSyncedAt = 0;
+let pushTimer = null;
+let pullInterval = null;
+
+function getDeviceName() {
+  var name = localStorage.getItem('device-name');
+  if (!name) {
+    name = 'Device-' + Math.random().toString(36).slice(2, 7);
+    localStorage.setItem('device-name', name);
+  }
+  return name;
+}
+
+function setSyncBadge(text, show) {
+  var el = document.getElementById('syncBadge');
+  if (!el) return;
+  el.textContent = text;
+  el.style.display = show ? 'block' : 'none';
+}
+
+function getPin() { return localStorage.getItem('app-pin') || ''; }
+
+async function submitPin() {
+  var input = document.getElementById('pinInput');
+  var status = document.getElementById('pinStatus');
+  var btn = document.getElementById('pinSubmitBtn');
+  var pin = (input.value || '').trim();
+  if (!pin) { status.textContent = 'PIN tidak boleh kosong.'; return; }
+
+  btn.disabled = true; btn.textContent = 'Memeriksa...';
+  try {
+    var res = await fetch('/api/verify-pin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin: pin })
+    });
+    var data = await res.json();
+    if (data.ok) {
+      localStorage.setItem('app-pin', pin);
+      status.style.color = '#137333';
+      status.textContent = '✓ PIN benar, menyinkronkan...';
+      await startSync(true);
+      document.getElementById('pinOverlay').style.display = 'none';
+    } else {
+      status.style.color = '#b3261e';
+      status.textContent = 'PIN salah. Coba lagi.';
+    }
+  } catch (e) {
+    status.style.color = '#b3261e';
+    status.textContent = 'Gagal terhubung ke server. Cek koneksi internet.';
+  }
+  btn.disabled = false; btn.textContent = 'Masuk';
+}
+
+function usePinLater() {
+  document.getElementById('pinOverlay').style.display = 'none';
+  syncEnabled = false;
+  setSyncBadge('', false);
+}
+
+function queuePush() {
+  if (!syncEnabled) return;
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(pushState, 700);
+}
+
+async function pushState() {
+  if (!syncEnabled) return;
+  setSyncBadge('Menyimpan ke server...', true);
+  var combined = JSON.stringify({
+    stockState: loadJSON('stock-state', {}),
+    excelMatrixData: loadJSON('excel-matrix-data', {}),
+    riwayatPenjualan: loadJSON('riwayat-penjualan', [])
+  });
+  try {
+    var res = await fetch('/api/state', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-App-Pin': getPin(),
+        'X-Device-Name': getDeviceName()
+      },
+      body: JSON.stringify({ value: combined })
+    });
+    if (res.status === 401) { syncEnabled = false; showPinOverlayAgain('PIN tidak valid lagi. Masuk ulang.'); return; }
+    var data = await res.json();
+    if (data.updatedAt) lastSyncedAt = data.updatedAt;
+    setSyncBadge('✓ Tersinkron', true);
+    setTimeout(function () { setSyncBadge('', false); }, 1500);
+  } catch (e) {
+    setSyncBadge('⚠ Offline — tersimpan lokal saja', true);
+    setTimeout(function () { setSyncBadge('', false); }, 2500);
+  }
+}
+
+async function pullState(silent) {
+  if (!syncEnabled) return;
+  var active = document.activeElement;
+  var isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA') && document.hasFocus();
+  try {
+    var res = await fetch('/api/state', { headers: { 'X-App-Pin': getPin() } });
+    if (res.status === 401) { syncEnabled = false; showPinOverlayAgain('PIN tidak valid lagi. Masuk ulang.'); return; }
+    var data = await res.json();
+    if (!data.value || data.updatedAt <= lastSyncedAt) return;
+    if (isTyping) return; // jangan timpa sementara user lagi ngetik
+
+    var parsed = JSON.parse(data.value);
+    if (parsed.stockState) { stockState = parsed.stockState; localStorage.setItem('stock-state', JSON.stringify(parsed.stockState)); }
+    if (parsed.excelMatrixData) { excelMatrixData = parsed.excelMatrixData; localStorage.setItem('excel-matrix-data', JSON.stringify(parsed.excelMatrixData)); }
+    if (parsed.riwayatPenjualan) { riwayatPenjualan = parsed.riwayatPenjualan; localStorage.setItem('riwayat-penjualan', JSON.stringify(parsed.riwayatPenjualan)); }
+    lastSyncedAt = data.updatedAt;
+
+    renderStockInputs();
+    renderRiwayatPenjualan();
+    renderExcelMatrix();
+    renderChart();
+    syncPenusukanDenganAyam();
+    if (!silent) setSyncBadge('✓ Data diperbarui dari device lain', true);
+    setTimeout(function () { setSyncBadge('', false); }, 2000);
+  } catch (e) { /* offline, diamkan saja */ }
+}
+
+function showPinOverlayAgain(message) {
+  document.getElementById('pinOverlay').style.display = 'flex';
+  document.getElementById('pinStatus').style.color = '#b3261e';
+  document.getElementById('pinStatus').textContent = message || '';
+  clearInterval(pullInterval);
+}
+
+async function startSync(pullFirst) {
+  syncEnabled = true;
+  if (pullFirst) await pullState(true);
+  clearInterval(pullInterval);
+  pullInterval = setInterval(function () { pullState(false); }, 15000);
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) pullState(false);
+  });
+  window.addEventListener('online', function () { pullState(false); });
+}
+
+async function initSyncGate() {
+  var pin = getPin();
+  var infoEl = document.getElementById('syncInfoText');
+  if (!pin) {
+    document.getElementById('pinOverlay').style.display = 'flex';
+    if (infoEl) infoEl.textContent = 'Belum login sinkronisasi di device ini.';
+    return;
+  }
+  try {
+    var res = await fetch('/api/verify-pin', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pin: pin })
+    });
+    var data = await res.json();
+    if (data.ok) {
+      document.getElementById('pinOverlay').style.display = 'none';
+      if (infoEl) infoEl.textContent = '✓ Tersambung sebagai ' + getDeviceName();
+      await startSync(true);
+    } else {
+      showPinOverlayAgain('PIN tersimpan sudah tidak berlaku. Masuk ulang.');
+    }
+  } catch (e) {
+    document.getElementById('pinOverlay').style.display = 'none';
+    if (infoEl) infoEl.textContent = 'Offline — pakai data lokal, akan sinkron lagi saat online.';
+    syncEnabled = true;
+    window.addEventListener('online', function () { initSyncGate(); }, { once: true });
+  }
+}
+
+function logoutDevice() {
+  if (!confirm('Keluar dari sinkronisasi di device ini? Data lokal tetap ada, tapi tidak akan sinkron sampai login ulang dengan PIN.')) return;
+  localStorage.removeItem('app-pin');
+  syncEnabled = false;
+  clearInterval(pullInterval);
+  var infoEl = document.getElementById('syncInfoText');
+  if (infoEl) infoEl.textContent = 'Belum login sinkronisasi di device ini.';
+  document.getElementById('pinOverlay').style.display = 'flex';
+}
+
+
+/* =========================
+   UPLOAD BANNER / FOTO
+========================= */
+function uploadBanner(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const imgUrl = e.target.result;
+      setBannerImage(imgUrl);
+      saveJSON('banner-image', imgUrl);
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function setBannerImage(url) {
+  const banner = document.getElementById('bannerCard');
+  const overlay = document.getElementById('bannerOverlay');
+  if (url) {
+    banner.style.backgroundImage = `url('${url}')`;
+    overlay.style.display = 'block';
+  }
+}
+
+function loadBannerImage() {
+  const savedImg = loadJSON('banner-image', null);
+  if (savedImg) setBannerImage(savedImg);
+}
+
+/* =========================
+   UTIL
+========================= */
+function hitungEkspresi(val) {
+  if (!val) return 0;
+  if (typeof val === 'number') return val;
+  var teks = String(val).trim().replace(/,/g, '.');
+  if (!teks) return 0;
+  if (/^[0-9.+*/\s-]+$/.test(teks)) {
+    try {
+      var hasil = Function('"use strict"; return (' + teks + ')')();
+      return isNaN(hasil) || !isFinite(hasil) ? 0 : hasil;
+    } catch (e) { return 0; }
+  }
+  var angkaSaja = parseFloat(teks);
+  return isNaN(angkaSaja) ? 0 : angkaSaja;
+}
+
+function angka(id) { 
+  var input = document.getElementById(id);
+  return input ? hitungEkspresi(input.value) : 0; 
+}
+
+function format(n) {
+  if (n === '' || n === null || n === undefined || isNaN(n)) return '';
+  var hasil = Math.round(n * 100) / 100;
+  return Number.isInteger(hasil) ? hasil.toString() : hasil.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+}
+
+function formatTanggalPendek(d) {
+  var bulan = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+  return d.getDate() + " " + bulan[d.getMonth()] + " " + d.getFullYear() + ", " + String(d.getHours()).padStart(2,'0') + ":" + String(d.getMinutes()).padStart(2,'0');
+}
+
+function tampilTanggal() {
+  var hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+  var bulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+  var d = new Date();
+  document.getElementById("tanggal").textContent = hari[d.getDay()] + ", " + d.getDate() + " " + bulan[d.getMonth()] + " " + d.getFullYear();
+}
+
+/* =========================
+   SLIDE NAVIGASI & INDICATOR HALAMAN
+========================= */
+function gotoPage(name, pageIndex) {
+  const container = document.getElementById('pagesContainer');
+  const indicator = document.getElementById('navIndicator');
+  
+  // Geser Halaman
+  container.style.transform = `translateX(-${pageIndex * 33.3333}%)`;
+  
+  // Geser Indikator Tab
+  indicator.style.transform = `translateX(${pageIndex * 100}%)`;
+
+  document.querySelectorAll('.navbtn').forEach(b => {
+    b.classList.toggle('active', b.dataset.page === name);
+  });
+
+  if (name === 'beranda' && stockChartInstance) {
+    setTimeout(() => stockChartInstance.resize(), 300);
+  }
+}
+
+/* =========================
+   PENJUALAN AYAM
+========================= */
+function ubah(id, nilai) {
+  var input = document.getElementById(id);
+  var hasil = hitungEkspresi(input.value) + nilai;
+  input.value = hasil < 0 ? 0 : hasil;
+  hitungPenjualan();
+}
+
+function hitungPenjualan() {
+  var utuh = angka("utuh"), setengah = angka("setengah"), seperempat = angka("seperempat");
+  var penjualan = utuh + (setengah * 0.5) + (seperempat * 0.25);
+  document.getElementById("totalPenjualan").textContent = format(penjualan) + " ekor";
+
+  var penusukan = angka("penusukan");
+  var selisih = penjualan - penusukan;
+
+  var box = document.getElementById("difference");
+  var label = document.getElementById("differenceLabel");
+  var desc = document.getElementById("differenceDesc");
+  var number = document.getElementById("differenceNumber");
+
+  if (selisih < -0.001) {
+    box.style.background = "#fce8e6"; label.style.color = "#b3261e"; number.style.color = "#b3261e";
+    label.textContent = "KURANG"; desc.textContent = "Penusukan lebih banyak";
+    number.textContent = format(selisih) + " ekor";
+  } else if (selisih > 0.001) {
+    box.style.background = "#fff4d6"; label.style.color = "#a36b00"; number.style.color = "#a36b00";
+    label.textContent = "LEBIH"; desc.textContent = "Penjualan lebih banyak";
+    number.textContent = "+" + format(selisih) + " ekor";
+  } else {
+    box.style.background = "#e6f4ea"; label.style.color = "#137333"; number.style.color = "#137333";
+    label.textContent = "PAS"; desc.textContent = "Penjualan dan penusukan sama";
+    number.textContent = "0 ekor";
+  }
+}
+
+function simpanPenjualan() {
+  var utuh = angka("utuh"), setengah = angka("setengah"), seperempat = angka("seperempat");
+  var total = utuh + setengah * 0.5 + seperempat * 0.25;
+  var penusukan = angka("penusukan");
+  var selisih = total - penusukan;
+  var tanggal = new Date();
+  var keterangan = (document.getElementById("salesNote").value || "").trim();
+
+  riwayatPenjualan.unshift({
+    tanggalLabel: formatTanggalPendek(tanggal),
+    utuh: utuh, setengah: setengah, seperempat: seperempat,
+    total: total, penusukan: penusukan, selisih: selisih,
+    keterangan: keterangan
+  });
+
+  saveJSON('riwayat-penjualan', riwayatPenjualan);
+  document.getElementById('salesSaveStatus').textContent = '✓ Tersimpan · ' + formatTanggalPendek(tanggal);
+  document.getElementById('salesNote').value = '';
+
+  document.getElementById('utuh').value = '0';
+  document.getElementById('setengah').value = '0';
+  document.getElementById('seperempat').value = '0';
+  hitungPenjualan();
+  syncPenusukanDenganAyam();
+
+  renderRiwayatPenjualan();
+}
+
+/* =========================
+   STOCK ITEM FORM INPUT
+========================= */
+function renderStockInputs() {
+  var container = document.getElementById('stockCards');
+  container.innerHTML = STOCK_ITEMS.map(function (item) {
+    var s = stockState[item.id] || { awal: 0, masuk: 0, akhir: 0, keluar: 0, keterangan: '' };
+    return '<div class="card">' +
+      '<div class="card-head"><div class="card-head-left"><div class="icon" style="background:' + item.color + '22">' + item.icon + '</div>' +
+      '<div><h2>' + item.nama + '</h2><span>Satuan: ' + item.unit + '</span></div></div></div>' +
+      '<div class="stock-body">' +
+        '<div class="stock-line"><div class="stock-label">Stok Awal</div>' +
+          '<input class="number-input" id="input-awal-' + item.id + '" type="text" value="' + s.awal + '"></div>' +
+        '<div class="stock-line"><div class="stock-label">Masuk</div>' +
+          '<input class="number-input" id="input-masuk-' + item.id + '" type="text" value="' + s.masuk + '"></div>' +
+        '<div class="stock-line"><div class="stock-label">Stok Akhir</div>' +
+          '<input class="number-input" id="input-akhir-' + item.id + '" type="text" value="' + s.akhir + '"></div>' +
+        '<div class="stock-total" style="background:' + item.color + '"><label>TERPAKAI</label>' +
+          '<div class="stock-total-input-wrap">' +
+            '<input class="stock-total-input" id="keluar-' + item.id + '" type="text" value="' + s.keluar + '">' +
+            '<span class="stock-unit-label">' + item.unit + '</span>' +
+          '</div></div>' +
+        '<input class="note-input" id="input-ket-' + item.id + '" type="text" maxlength=200 placeholder="Keterangan (opsional)" value="' + escapeHTML(s.keterangan || '') + '">' +
+        '<button class="save stock-item-save" onclick="simpanStockItem(\'' + item.id + '\')">💾 Simpan ' + escapeHTML(item.nama) + '</button>' +
+      '</div></div>';
+  }).join('');
+
+  STOCK_ITEMS.forEach(function(item) {
+    ['awal', 'masuk', 'akhir'].forEach(function(field) {
+      var el = document.getElementById('input-' + field + '-' + item.id);
+      if (el) {
+        el.addEventListener('input', function(e) {
+          var s = stockState[item.id];
+          s[field] = hitungEkspresi(e.target.value);
+          s.keluar = (s.awal + s.masuk) - s.akhir;
+          var inputKeluar = document.getElementById('keluar-' + item.id);
+          if (inputKeluar) inputKeluar.value = s.keluar;
+
+          renderChart();
+          if (item.id === 'ayam') syncPenusukanDenganAyam();
+        });
+      }
+    });
+
+    var elKeluar = document.getElementById('keluar-' + item.id);
+    if (elKeluar) {
+      elKeluar.addEventListener('input', function(e) {
+        var s = stockState[item.id];
+        s.keluar = hitungEkspresi(e.target.value);
+        s.akhir = (s.awal + s.masuk) - s.keluar;
+        var inputAkhir = document.getElementById('input-akhir-' + item.id);
+        if (inputAkhir) inputAkhir.value = s.akhir;
+
+        renderChart();
+        if (item.id === 'ayam') syncPenusukanDenganAyam();
+      });
+    }
+
+    var elKet = document.getElementById('input-ket-' + item.id);
+    if (elKet) {
+      elKet.addEventListener('input', function(e) { stockState[item.id].keterangan = e.target.value; });
+    }
+  });
+}
+
+function syncPenusukanDenganAyam() {
+  var ayam = stockState.ayam || { keluar: 0 };
+  var input = document.getElementById('penusukan');
+  if (input) {
+    input.value = Number(ayam.keluar) || 0;
+    hitungPenjualan();
+  }
+}
+
+/* =========================
+   EKSEKUSI LANGSUNG STOK AKHIR KE STOK AWAL
+========================= */
+function simpanStockItem(itemId) {
+  var item = STOCK_ITEMS.find(function (i) { return i.id === itemId; });
+  if (!item) return;
+
+  var s = stockState[itemId];
+  var d = new Date();
+  s.tanggal = d.toDateString();
+
+  updateSingleDayMatrix(d.getFullYear(), d.getMonth() + 1, d.getDate(), itemId, s.awal, s.masuk, s.keluar, s.akhir, s.keterangan);
+
+  s.awal = s.akhir;
+  s.masuk = 0;
+  s.keluar = 0;
+  s.keterangan = '';
+
+  saveJSON('stock-state', stockState);
+  syncPenusukanDenganAyam();
+  renderStockInputs();
+  renderExcelMatrix();
+  
+  document.getElementById('stockSaveStatus').textContent = '✓ ' + item.nama + ' tersimpan & dieksekusi ke Stok Awal!';
+  renderChart();
+}
+
+function simpanSemuaStock() {
+  var d = new Date();
+  STOCK_ITEMS.forEach(function (item) {
+    var s = stockState[item.id];
+    s.tanggal = d.toDateString();
+    
+    updateSingleDayMatrix(d.getFullYear(), d.getMonth() + 1, d.getDate(), item.id, s.awal, s.masuk, s.keluar, s.akhir, s.keterangan);
+    
+    s.awal = s.akhir;
+    s.masuk = 0;
+    s.keluar = 0;
+    s.keterangan = '';
+  });
+
+  saveJSON('stock-state', stockState);
+  syncPenusukanDenganAyam();
+  renderStockInputs();
+  renderExcelMatrix();
+  
+  document.getElementById('stockSaveStatus').textContent = '✓ Semua stok tersimpan & dieksekusi ke Stok Awal!';
+  renderChart();
+}
+
+/* =========================
+   DIAGRAM STOCK (BERANDA)
+========================= */
+function renderChart() {
+  var canvas = document.getElementById('stockChart');
+  if (!canvas || typeof Chart === 'undefined') return;
+
+  var labels = STOCK_ITEMS.map(i => i.icon + ' ' + i.nama);
+  var data = STOCK_ITEMS.map(i => stockState[i.id] ? (Number(stockState[i.id].akhir) || 0) : 0);
+  var colors = STOCK_ITEMS.map(i => i.color);
+
+  if (stockChartInstance) {
+    stockChartInstance.data.labels = labels;
+    stockChartInstance.data.datasets[0].data = data;
+    stockChartInstance.data.datasets[0].backgroundColor = colors;
+    stockChartInstance.update();
+  } else {
+    stockChartInstance = new Chart(canvas, {
+      type: 'bar',
+      data: { labels: labels, datasets: [{ label: 'Stok saat ini', data: data, backgroundColor: colors, borderRadius: 6, maxBarThickness: 18 }] },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { beginAtZero: true, grid: { color: '#eee9df' }, ticks: { font: { size: 9 } } },
+          y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+        }
+      }
+    });
+  }
+
+  var legend = document.getElementById('legendList');
+  legend.innerHTML = STOCK_ITEMS.map((item, idx) => 
+    '<div class="legend-row"><div class="legend-dot" style="background:' + item.color + '"></div>' +
+    '<div class="legend-name">' + item.nama + '</div>' +
+    '<div class="legend-val">' + format(data[idx]) + ' ' + item.unit + '</div></div>'
+  ).join('');
+}
+
+function escapeHTML(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+/* =========================
+   FILTER TABS LOGIC
+========================= */
+function renderFilterTabs() {
+  const container = document.getElementById('itemFilterTabs');
+  if (!container) return;
+  let tabsHtml = `<button class="tab-btn ${selectedFilterItem === 'all' ? 'active' : ''}" onclick="filterMatrixItem('all')">✨ Semua</button>`;
+  STOCK_ITEMS.forEach(item => {
+    tabsHtml += `<button class="tab-btn ${selectedFilterItem === item.id ? 'active' : ''}" onclick="filterMatrixItem('${item.id}')">${item.icon} ${item.nama}</button>`;
+  });
+  container.innerHTML = tabsHtml;
+}
+
+function filterMatrixItem(itemId) {
+  selectedFilterItem = itemId;
+  renderFilterTabs();
+  renderExcelMatrix();
+}
+
+/* =========================
+   MATRIX SHEET BERANTAI REALTIME
+========================= */
+function initExcelDropdowns() {
+  const selectBulan = document.getElementById('selectBulanExcel');
+  const selectTahun = document.getElementById('selectTahunExcel');
+  const namaBulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+  const d = new Date();
+  
+  selectBulan.innerHTML = namaBulan.map((b, idx) => `<option value="${idx + 1}" ${idx === d.getMonth() ? 'selected' : ''}>${b}</option>`).join('');
+
+  const currentYear = d.getFullYear();
+  let optTahun = '';
+  for (let y = currentYear - 1; y <= currentYear + 2; y++) {
+    optTahun += `<option value="${y}" ${y === currentYear ? 'selected' : ''}>${y}</option>`;
+  }
+  selectTahun.innerHTML = optTahun;
+}
+
+function getKeyYearMonth(year, month) {
+  return `${year}-${String(month).padStart(2, '0')}`;
+}
+
+function getDaysInMonth(year, month) {
+  return new Date(year, month, 0).getDate();
+}
+
+function recalculateChain(year, month, itemId) {
+  const key = getKeyYearMonth(year, month);
+  if (!excelMatrixData[key]) excelMatrixData[key] = {};
+  if (!excelMatrixData[key][itemId]) excelMatrixData[key][itemId] = {};
+
+  const itemData = excelMatrixData[key][itemId];
+  const totalDays = getDaysInMonth(year, month);
+
+  for (let d = 1; d <= totalDays; d++) {
+    if (!itemData[d]) {
+      itemData[d] = { awal: '', masuk: '', keluar: '', akhir: '', isManualAwal: false, isManualAkhir: false, ket: '' };
+    }
+
+    if (d > 1) {
+      if (!itemData[d].isManualAwal) {
+        let prevAkhir = itemData[d - 1].akhir !== '' ? Number(itemData[d - 1].akhir) : 0;
+        itemData[d].awal = prevAkhir;
+      }
+    } else {
+      if (itemData[d].awal === '') itemData[d].awal = 0;
+    }
+
+    const awal = itemData[d].awal !== '' ? Number(itemData[d].awal) : 0;
+    const masuk = itemData[d].masuk !== '' ? Number(itemData[d].masuk) : 0;
+    const keluar = itemData[d].keluar !== '' ? Number(itemData[d].keluar) : 0;
+
+    if (!itemData[d].isManualAkhir) {
+      itemData[d].akhir = (awal + masuk) - keluar;
+    }
+  }
+
+  saveJSON('excel-matrix-data', excelMatrixData);
+}
+
+function updateSingleDayMatrix(year, month, day, itemId, awal, masuk, keluar, akhir, ket) {
+  const key = getKeyYearMonth(year, month);
+  if (!excelMatrixData[key]) excelMatrixData[key] = {};
+  if (!excelMatrixData[key][itemId]) excelMatrixData[key][itemId] = {};
+  
+  excelMatrixData[key][itemId][day] = {
+    awal: awal !== '' ? Number(awal) : '',
+    masuk: masuk !== '' ? Number(masuk) : '',
+    keluar: keluar !== '' ? Number(keluar) : '',
+    akhir: akhir !== '' ? Number(akhir) : '',
+    isManualAwal: awal !== '',
+    isManualAkhir: akhir !== '',
+    ket: ket || ''
+  };
+
+  recalculateChain(year, month, itemId);
+}
+
+function renderExcelMatrix() {
+  const year = Number(document.getElementById('selectTahunExcel').value);
+  const month = Number(document.getElementById('selectBulanExcel').value);
+  const key = getKeyYearMonth(year, month);
+  const totalDays = getDaysInMonth(year, month);
+  
+  const monthData = excelMatrixData[key] || {};
+  const container = document.getElementById('excelItemSheetsContainer');
+
+  const itemsToRender = selectedFilterItem === 'all' 
+    ? STOCK_ITEMS 
+    : STOCK_ITEMS.filter(i => i.id === selectedFilterItem);
+
+  if (itemsToRender.length === 0) {
+    container.innerHTML = '<div style="text-align:center; padding:20px; color:#888;">Kosong.</div>';
+    return;
+  }
+
+  let htmlAllSheets = itemsToRender.map(item => {
+    recalculateChain(year, month, item.id);
+    const itemData = monthData[item.id] || {};
+
+    let theadHtml = `<tr>
+      <th style="width:35px;">Tgl</th>
+      <th style="width:60px;">Awal</th>
+      <th style="width:60px;">Masuk</th>
+      <th style="width:60px;">Keluar</th>
+      <th style="width:60px;">Akhir</th>
+      <th>Ket</th>
+    </tr>`;
+
+    let totalMasuk = 0, totalKeluar = 0;
+    let tbodyHtml = '';
+
+    for (let d = 1; d <= totalDays; d++) {
+      const dayObj = itemData[d] || { awal: '', masuk: '', keluar: '', akhir: '', ket: '' };
+      
+      const valAwal = dayObj.awal;
+      const valMasuk = dayObj.masuk;
+      const valKeluar = dayObj.keluar;
+      const valAkhir = dayObj.akhir;
+      const valKet = dayObj.ket || '';
+
+      if (valMasuk !== '') totalMasuk += Number(valMasuk) || 0;
+      if (valKeluar !== '') totalKeluar += Number(valKeluar) || 0;
+
+      tbodyHtml += `<tr>
+        <td style="font-weight:bold; background:#f8f9fa;">${d}</td>
+        <td><input class="cell-input" type="text" value="${valAwal !== '' ? format(valAwal) : ''}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'awal')"></td>
+        <td><input class="cell-input" type="text" value="${valMasuk !== '' ? format(valMasuk) : ''}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'masuk')"></td>
+        <td><input class="cell-input" type="text" value="${valKeluar !== '' ? format(valKeluar) : ''}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'keluar')"></td>
+        <td><input class="cell-input" type="text" value="${valAkhir !== '' ? format(valAkhir) : ''}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'akhir')"></td>
+        <td><input class="cell-input text-left" type="text" value="${escapeHTML(valKet)}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'ket')"></td>
+      </tr>`;
+    }
+
+    let tfootHtml = `<tr class="excel-total-row">
+      <td>Total</td><td>—</td>
+      <td>${format(totalMasuk)}</td>
+      <td>${format(totalKeluar)}</td>
+      <td>—</td><td>—</td>
+    </tr>`;
+
+    return `<div class="card" style="margin-bottom:12px;">
+      <div class="card-head">
+        <div class="card-head-left">
+          <div class="icon" style="background:${item.color}22">${item.icon}</div>
+          <div><h2>${item.nama}</h2><span>Satuan: ${item.unit}</span></div>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="excel-table">
+          <thead>${theadHtml}</thead>
+          <tbody>${tbodyHtml}</tbody>
+          <tfoot>${tfootHtml}</tfoot>
+        </table>
+      </div>
+    </div>`;
+  }).join('');
+
+  container.innerHTML = htmlAllSheets;
+}
+
+function onMatrixCellChange(input, year, month, itemId, day, fieldKey) {
+  const key = getKeyYearMonth(year, month);
+  if (!excelMatrixData[key]) excelMatrixData[key] = {};
+  if (!excelMatrixData[key][itemId]) excelMatrixData[key][itemId] = {};
+  if (!excelMatrixData[key][itemId][day]) {
+    excelMatrixData[key][itemId][day] = { awal: '', masuk: '', keluar: '', akhir: '', isManualAwal: false, isManualAkhir: false, ket: '' };
+  }
+
+  const dayObj = excelMatrixData[key][itemId][day];
+  
+  if (fieldKey === 'ket') {
+    dayObj.ket = input.value;
+  } else {
+    var hasilAngka = hitungEkspresi(input.value);
+    if (fieldKey === 'awal') {
+      dayObj.awal = input.value !== '' ? hasilAngka : '';
+      dayObj.isManualAwal = input.value !== '';
+    } else if (fieldKey === 'akhir') {
+      dayObj.akhir = input.value !== '' ? hasilAngka : '';
+      dayObj.isManualAkhir = input.value !== '';
+    } else {
+      dayObj[fieldKey] = input.value !== '' ? hasilAngka : '';
+    }
+  }
+
+  recalculateChain(year, month, itemId);
+  renderStockInputs();
+  renderChart();
+  syncPenusukanDenganAyam();
+  renderExcelMatrix();
+}
+
+/* =========================
+   BACKUP / RESTORE DATA
+========================= */
+function exportData() {
+  var payload = {
+    exportedAt: new Date().toISOString(),
+    app: 'age-mt-haryono',
+    version: 1,
+    data: {
+      'stock-state': loadJSON('stock-state', {}),
+      'excel-matrix-data': loadJSON('excel-matrix-data', {}),
+      'riwayat-penjualan': loadJSON('riwayat-penjualan', [])
+    }
+  };
+  var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  var tanggal = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = 'backup-age-mt-haryono-' + tanggal + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  document.getElementById('backupStatus').textContent = '✓ Backup diunduh · ' + formatTanggalPendek(new Date());
+}
+
+function importData(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var status = document.getElementById('backupStatus');
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      var payload = JSON.parse(e.target.result);
+      var data = payload && payload.data ? payload.data : payload;
+      if (!data || typeof data !== 'object') throw new Error('Format tidak valid');
+
+      if (!confirm('Import akan MENIMPA data penjualan, stok, dan matrix yang ada sekarang di HP ini. Lanjutkan?')) {
+        status.textContent = 'Import dibatalkan.';
+        event.target.value = '';
+        return;
+      }
+
+      if (data['stock-state']) saveJSON('stock-state', data['stock-state']);
+      if (data['excel-matrix-data']) saveJSON('excel-matrix-data', data['excel-matrix-data']);
+      if (data['riwayat-penjualan']) saveJSON('riwayat-penjualan', data['riwayat-penjualan']);
+
+      stockState = loadJSON('stock-state', {});
+      excelMatrixData = loadJSON('excel-matrix-data', {});
+      riwayatPenjualan = loadJSON('riwayat-penjualan', []);
+
+      renderStockInputs();
+      renderRiwayatPenjualan();
+      renderExcelMatrix();
+      renderChart();
+      syncPenusukanDenganAyam();
+
+      status.textContent = '✓ Data berhasil di-import · ' + formatTanggalPendek(new Date());
+    } catch (err) {
+      status.textContent = '✗ Gagal import: file tidak valid';
+      console.error(err);
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+/* =========================
+   RIWAYAT PENJUALAN
+========================= */
+function renderRiwayatPenjualan() {
+  var tbodyP = document.getElementById('tbodyPenjualan');
+  if (riwayatPenjualan.length === 0) {
+    tbodyP.innerHTML = '<tr><td colspan="8" class="empty">Belum ada riwayat</td></tr>';
+  } else {
+    tbodyP.innerHTML = riwayatPenjualan.map(function (r) {
+      var warna = r.selisih < 0 ? '#b3261e' : (r.selisih > 0 ? '#a36b00' : '#137333');
+      var tanda = r.selisih > 0 ? '+' : '';
+      return '<tr><td style="padding:4px 6px;">' + r.tanggalLabel + '</td><td>' + format(r.utuh) + '</td><td>' + format(r.setengah) + '</td>' +
+        '<td>' + format(r.seperempat) + '</td><td><b>' + format(r.total) + '</b></td><td>' + format(r.penusukan) + '</td>' +
+        '<td style="color:' + warna + '; font-weight:bold;">' + tanda + format(r.selisih) + '</td><td>' +
+        (r.keterangan ? escapeHTML(r.keterangan) : '<span style="color:#aaa">—</span>') + '</td></tr>';
+    }).join('');
+  }
+}
+
+function hapusRiwayatPenjualan(btn) {
+  if (!confirmDeleteP) {
+    confirmDeleteP = true;
+    btn.textContent = 'Yakin hapus? Klik lagi';
+    setTimeout(function () { confirmDeleteP = false; btn.textContent = '🗑️ Hapus Riwayat Penjualan'; }, 3000);
+    return;
+  }
+  riwayatPenjualan = [];
+  saveJSON('riwayat-penjualan', riwayatPenjualan);
+  confirmDeleteP = false;
+  btn.textContent = '🗑️ Hapus Riwayat Penjualan';
+  renderRiwayatPenjualan();
+}
+
+/* =========================
+   INPUT OTOMATIS PENJUALAN
+========================= */
+document.querySelectorAll('#page-beranda input').forEach(function (input) {
+  input.addEventListener('input', hitungPenjualan);
+  input.addEventListener('keyup', hitungPenjualan);
+  input.addEventListener('change', function() {
+    if (this.id === 'utuh' || this.id === 'setengah' || this.id === 'seperempat' || this.id === 'penusukan') {
+      this.value = hitungEkspresi(this.value);
+      hitungPenjualan();
+    }
+  });
+});
+
+/* =========================
+   INIT
+========================= */
+function init() {
+  tampilTanggal();
+  initExcelDropdowns();
+  loadBannerImage();
+
+  var loadedState = loadJSON('stock-state', {});
+  var todayStr = new Date().toDateString();
+
+  STOCK_ITEMS.forEach(function (item) {
+    var s = loadedState[item.id];
+    stockState[item.id] = s ? s : { awal: 0, masuk: 0, akhir: 0, keluar: 0, keterangan: '', tanggal: todayStr };
+    stockState[item.id].tanggal = todayStr;
+  });
+
+  excelMatrixData = loadJSON('excel-matrix-data', {});
+  riwayatPenjualan = loadJSON('riwayat-penjualan', []);
+
+  var now = new Date();
+  STOCK_ITEMS.forEach(function(item) {
+    recalculateChain(now.getFullYear(), now.getMonth() + 1, item.id);
+  });
+
+  renderStockInputs();
+  renderRiwayatPenjualan();
+  renderFilterTabs();
+  renderExcelMatrix();
+  renderChart();
+  hitungPenjualan();
+  syncPenusukanDenganAyam();
+}
+
+init();
+initSyncGate();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js').catch(function (e) {
+      console.warn('Service worker gagal didaftarkan:', e);
+    });
+  });
+}
+</script>
+</body>
+</html>
