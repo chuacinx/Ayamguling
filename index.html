@@ -163,7 +163,7 @@ html, body {
   margin: 8px 12px 10px; cursor: pointer; box-shadow: 0 3px 10px rgba(215,25,32,0.2);
 }
 
-/* ========= KELOLA STOK MASSAL (KOLOM DIBATASI & LEBIH RINGKAS) ========= */
+/* ========= KELOLA STOK MASSAL ========= */
 .bulk-stock-card { padding: 8px 10px; }
 .bulk-stock-title { font-size: 10px; font-weight: 800; margin-bottom: 2px; }
 .bulk-stock-desc { font-size: 8px; color: var(--text-sub); line-height: 1.2; margin-bottom: 4px; }
@@ -359,7 +359,7 @@ td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-s
         </div>
 
         <div class="header">
-          <h1>AGE</h1>
+          <h1>AGE MT. HARYONO</h1>
           <p>Kalkulator penjualan & ringkasan stok hari ini</p>
         </div>
 
@@ -432,15 +432,15 @@ td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-s
         </div>
 
         <div class="card bulk-stock-card">
-          <div class="bulk-stock-title">⚙️ Kelola Stok (Tambah / Hapus)</div>
+          <div class="bulk-stock-title">⚙️ Kelola Stok Massal (Tambah / Hapus)</div>
           <div class="bulk-stock-desc">
             Tulis 1 barang per baris. <i>Tambah:</i> Nama | Satuan. <i>Hapus:</i> Cukup nama barang.
           </div>
           <textarea id="bulkStockInput" class="bulk-stock-textarea"
-            placeholder="Minyak Goreng | liter&#10;Surya | btg&#10;"></textarea>
+            placeholder="Minyak Goreng | liter&#10;Garam | pcs&#10;Kecap"></textarea>
           <div class="bulk-stock-actions">
-            <button class="bulk-stock-add" onclick="tambahStockMassal()">＋ Tambah</button>
-            <button class="bulk-stock-remove" onclick="hapusStockMassal()">🗑️ Hapus </button>
+            <button class="bulk-stock-add" onclick="tambahStockMassal()">＋ Tambah Massal</button>
+            <button class="bulk-stock-remove" onclick="hapusStockMassal()">🗑️ Hapus Massal</button>
             <button class="bulk-stock-clear" onclick="document.getElementById('bulkStockInput').value=''">Bersihkan</button>
           </div>
           <div id="bulkStockStatus" class="bulk-stock-status"></div>
@@ -478,7 +478,7 @@ td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-s
           <button class="danger-btn" id="btnHapusPenjualan" onclick="hapusRiwayatPenjualan(this)">🗑️ Hapus Riwayat Penjualan</button>
         </div>
 
-        <div style="display:flex; justify-space-between; align-items:center; margin: 12px 2px 4px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin: 12px 2px 4px;">
           <div style="font-weight:800; font-size:11px;">📊 Matrix Stock</div>
           <div class="month-controls">
             <select class="filter-select" id="selectBulanExcel" onchange="renderExcelMatrix()"></select>
@@ -683,7 +683,6 @@ function hapusStockMassal() {
   }
 
   var customItems = getCustomStockItems();
-  var defaultIds = DEFAULT_STOCK_ITEMS.map(function(i) { return i.id; });
   var removedCount = 0;
   var cannotRemoveDefault = false;
 
@@ -1104,9 +1103,16 @@ function renderStockInputs() {
         el.addEventListener('input', function(e) {
           var s = stockState[item.id];
           s[field] = hitungEkspresi(e.target.value);
-          s.keluar = (s.awal + s.masuk) - s.akhir;
-          var inputKeluar = document.getElementById('keluar-' + item.id);
-          if (inputKeluar) inputKeluar.value = s.keluar;
+
+          if (field === 'masuk' || field === 'awal') {
+            s.akhir = (s.awal + s.masuk) - s.keluar;
+            var inputAkhir = document.getElementById('input-akhir-' + item.id);
+            if (inputAkhir) inputAkhir.value = s.akhir;
+          } else if (field === 'akhir') {
+            s.keluar = (s.awal + s.masuk) - s.akhir;
+            var inputKeluar = document.getElementById('keluar-' + item.id);
+            if (inputKeluar) inputKeluar.value = s.keluar;
+          }
 
           renderChart();
           if (item.id === 'ayam') syncPenusukanDenganAyam();
@@ -1150,6 +1156,12 @@ function simpanStockItem(itemId) {
   if (!item) return;
 
   var s = stockState[itemId];
+
+  s.awal = hitungEkspresi(document.getElementById('input-awal-' + itemId).value);
+  s.masuk = hitungEkspresi(document.getElementById('input-masuk-' + itemId).value);
+  s.keluar = hitungEkspresi(document.getElementById('keluar-' + itemId).value);
+  s.akhir = (s.awal + s.masuk) - s.keluar;
+
   var d = new Date();
   s.tanggal = d.toDateString();
 
@@ -1173,6 +1185,16 @@ function simpanSemuaStock() {
   var d = new Date();
   STOCK_ITEMS.forEach(function (item) {
     var s = stockState[item.id];
+    
+    var inputAwal = document.getElementById('input-awal-' + item.id);
+    var inputMasuk = document.getElementById('input-masuk-' + item.id);
+    var inputKeluar = document.getElementById('keluar-' + item.id);
+
+    if (inputAwal) s.awal = hitungEkspresi(inputAwal.value);
+    if (inputMasuk) s.masuk = hitungEkspresi(inputMasuk.value);
+    if (inputKeluar) s.keluar = hitungEkspresi(inputKeluar.value);
+
+    s.akhir = (s.awal + s.masuk) - s.keluar;
     s.tanggal = d.toDateString();
     
     updateSingleDayMatrix(d.getFullYear(), d.getMonth() + 1, d.getDate(), item.id, s.awal, s.masuk, s.keluar, s.akhir, s.keterangan);
