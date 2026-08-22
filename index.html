@@ -216,31 +216,6 @@ html, body {
   font-weight: 700; color: #137333; margin-top: 2px;
 }
 
-/* ========= STOCK GRID 2 KOLOM ========= */
-#stockCards {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-#stockCards .card { margin-bottom: 0; min-width: 0; }
-#stockCards .card-head { padding: 7px 8px; }
-#stockCards .card-head-left { gap: 5px; min-width: 0; }
-#stockCards .card-head h2 {
-  font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-#stockCards .card-head span { font-size: 7px; }
-#stockCards .icon { width: 24px; height: 24px; border-radius: 7px; font-size: 12px; }
-#stockCards .stock-body { padding: 0 8px 7px; }
-#stockCards .stock-line { padding: 5px 0; }
-#stockCards .stock-label { font-size: 9px; }
-#stockCards .number-input { width: 52px; height: 25px; font-size: 10px; }
-#stockCards .stock-total { margin-top: 5px; padding: 6px 7px; }
-#stockCards .stock-total label { font-size: 7px; }
-#stockCards .stock-total-input { width: 52px; height: 25px; font-size: 10px; }
-#stockCards .stock-unit-label { font-size: 8px; }
-#stockCards .note-input { height: 26px; margin-top: 5px; font-size: 8px; padding: 0 6px; }
-#stockCards .stock-item-save { height: 28px; margin: 5px 0 0; font-size: 8px; }
-
 /* ========= MATRIX PICKER ========= */
 .matrix-picker-row { display: flex; align-items: center; gap: 5px; margin: 8px 2px 5px; }
 .matrix-picker-label { font-size: 8px; color: var(--text-sub); font-weight: 700; white-space: nowrap; }
@@ -275,6 +250,33 @@ html, body {
 .stock-actions .save { width: 100%; margin: 0; }
 .save-status { text-align: center; font-size: 9px; font-weight: 600; color: var(--text-sub); min-height: 12px; padding-bottom: 2px; }
 
+
+/* ========= STOCK GRID 2 KOLOM ========= */
+#stockCards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+#stockCards .card { margin-bottom: 0; min-width: 0; }
+#stockCards .card-head { padding: 7px 8px; }
+#stockCards .card-head-left { gap: 5px; min-width: 0; }
+#stockCards .card-head h2 {
+  font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#stockCards .card-head span { font-size: 7px; }
+#stockCards .icon { width: 24px; height: 24px; border-radius: 7px; font-size: 12px; }
+#stockCards .stock-body { padding: 0 8px 7px; }
+#stockCards .stock-line { padding: 5px 0; }
+#stockCards .stock-label { font-size: 9px; }
+#stockCards .number-input { width: 52px; height: 25px; font-size: 10px; }
+#stockCards .stock-total { margin-top: 5px; padding: 6px 7px; }
+#stockCards .stock-total label { font-size: 7px; }
+#stockCards .stock-total-input { width: 52px; height: 25px; font-size: 10px; }
+#stockCards .stock-unit-label { font-size: 8px; }
+#stockCards .note-input { height: 26px; margin-top: 5px; font-size: 8px; padding: 0 6px; }
+#stockCards .stock-item-save { height: 28px; margin: 5px 0 0; font-size: 8px; }
+
+
 /* ========= CHART & TABLES ========= */
 .chart-card { padding: 12px; }
 .chart-wrap { height: 160px; position: relative; margin-top: 4px; }
@@ -297,6 +299,7 @@ table.excel-table tr:nth-child(even) td { background-color: #faf8f5; }
 
 .cell-input { width: 100%; height: 100%; border: none; background: transparent; text-align: center; font-family: monospace; font-size: 10px; font-weight: 600; outline: none; }
 .cell-input:focus { background: #fff3d1; }
+.cell-input[readonly] { background: #f3f0ea; color: #6f665a; cursor: not-allowed; }
 .cell-input.text-left { text-align: left; padding: 0 4px; font-family: inherit; }
 .excel-total-row td { background: #efebe4 !important; font-weight: bold; font-family: monospace; padding: 4px 3px; }
 td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-size: 10px; }
@@ -506,7 +509,7 @@ td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-s
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin: 12px 2px 4px;">
-          <div style="font-weight:800; font-size:11px;">📊 Matrix Stock</div>
+          <div style="font-weight:800; font-size:11px;">📊 Matrix Stock <span style="font-size:8px;color:#8a7f6c;">(Masuk & Keluar otomatis)</span></div>
           <div class="month-controls">
             <select class="filter-select" id="selectBulanExcel" onchange="renderExcelMatrix()"></select>
             <select class="filter-select" id="selectTahunExcel" onchange="renderExcelMatrix()"></select>
@@ -574,7 +577,7 @@ const DEFAULT_STOCK_ITEMS = [
 
 let STOCK_ITEMS = [];
 let stockState = {};
-let excelMatrixData = {}; 
+let excelMatrixData = {};
 let riwayatPenjualan = [];
 let stockChartInstance = null;
 let confirmDeleteP = false;
@@ -731,8 +734,8 @@ function hapusStockMassal() {
 
   if (removedCount === 0) {
     status.style.color = '#a36b00';
-    status.textContent = cannotRemoveDefault 
-      ? 'Item bawaan sistem tidak dapat dihapus.' 
+    status.textContent = cannotRemoveDefault
+      ? 'Item bawaan sistem tidak dapat dihapus.'
       : 'Item tidak ditemukan di kustom stok.';
     return;
   }
@@ -762,7 +765,7 @@ function loadJSON(key, fallback) {
 const SYNCED_KEYS = ['stock-state', 'excel-matrix-data', 'riwayat-penjualan', 'custom-stock-items'];
 
 function saveJSON(key, value) {
-  try { localStorage.setItem(key, JSON.stringify(value)); } 
+  try { localStorage.setItem(key, JSON.stringify(value)); }
   catch (e) { console.error('Gagal menyimpan:', key, e); }
   if (SYNCED_KEYS.indexOf(key) !== -1) queuePush();
 }
@@ -994,9 +997,9 @@ function hitungEkspresi(val) {
   return isNaN(angkaSaja) ? 0 : angkaSaja;
 }
 
-function angka(id) { 
+function angka(id) {
   var input = document.getElementById(id);
-  return input ? hitungEkspresi(input.value) : 0; 
+  return input ? hitungEkspresi(input.value) : 0;
 }
 
 function format(n) {
@@ -1021,7 +1024,7 @@ function tampilTanggal() {
 function gotoPage(name, pageIndex) {
   const container = document.getElementById('pagesContainer');
   const indicator = document.getElementById('navIndicator');
-  
+
   container.style.transform = `translateX(-${pageIndex * 33.3333}%)`;
   indicator.style.transform = `translateX(${pageIndex * 100}%)`;
 
@@ -1247,7 +1250,7 @@ function simpanStockItem(itemId) {
   syncPenusukanDenganAyam();
   renderStockInputs();
   renderExcelMatrix();
-  
+
   document.getElementById('stockSaveStatus').textContent = '✓ ' + item.nama + ' tersimpan!';
   renderChart();
 }
@@ -1256,7 +1259,7 @@ function simpanSemuaStock() {
   var d = new Date();
   STOCK_ITEMS.forEach(function (item) {
     var s = stockState[item.id];
-    
+
     var inputAwal = document.getElementById('input-awal-' + item.id);
     var inputMasuk = document.getElementById('input-masuk-' + item.id);
     var inputKeluar = document.getElementById('keluar-' + item.id);
@@ -1267,9 +1270,9 @@ function simpanSemuaStock() {
 
     s.akhir = (s.awal + s.masuk) - s.keluar;
     s.tanggal = d.toDateString();
-    
+
     updateSingleDayMatrix(d.getFullYear(), d.getMonth() + 1, d.getDate(), item.id, s.awal, s.masuk, s.keluar, s.akhir, s.keterangan);
-    
+
     s.awal = s.akhir;
     s.masuk = 0;
     s.keluar = 0;
@@ -1280,7 +1283,7 @@ function simpanSemuaStock() {
   syncPenusukanDenganAyam();
   renderStockInputs();
   renderExcelMatrix();
-  
+
   document.getElementById('stockSaveStatus').textContent = '✓ Semua stok tersimpan!';
   renderChart();
 }
@@ -1419,7 +1422,7 @@ function initExcelDropdowns() {
   const selectTahun = document.getElementById('selectTahunExcel');
   const namaBulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
   const d = new Date();
-  
+
   selectBulan.innerHTML = namaBulan.map((b, idx) => `<option value="${idx + 1}" ${idx === d.getMonth() ? 'selected' : ''}>${b}</option>`).join('');
 
   const currentYear = d.getFullYear();
@@ -1476,7 +1479,7 @@ function updateSingleDayMatrix(year, month, day, itemId, awal, masuk, keluar, ak
   const key = getKeyYearMonth(year, month);
   if (!excelMatrixData[key]) excelMatrixData[key] = {};
   if (!excelMatrixData[key][itemId]) excelMatrixData[key][itemId] = {};
-  
+
   excelMatrixData[key][itemId][day] = {
     awal: awal !== '' ? Number(awal) : '',
     masuk: masuk !== '' ? Number(masuk) : '',
@@ -1490,17 +1493,57 @@ function updateSingleDayMatrix(year, month, day, itemId, awal, masuk, keluar, ak
   recalculateChain(year, month, itemId);
 }
 
+function syncTodayStockToMatrix(itemId) {
+  var t = getTodayParts();
+  var key = getKeyYearMonth(t.year, t.month);
+  var s = stockState[itemId];
+  if (!s) return;
+
+  if (!excelMatrixData[key]) excelMatrixData[key] = {};
+  if (!excelMatrixData[key][itemId]) excelMatrixData[key][itemId] = {};
+
+  var row = excelMatrixData[key][itemId][t.day] || {
+    awal: '', masuk: '', keluar: '', akhir: '',
+    isManualAwal: false, isManualAkhir: false, ket: ''
+  };
+
+  /*
+   * Hari ini selalu mengikuti halaman Stok Barang:
+   * - Awal  -> stok awal
+   * - Masuk -> otomatis dari input Masuk
+   * - Keluar -> otomatis dari input Terpakai/Keluar
+   * - Akhir -> otomatis dari rumus
+   */
+  row.awal = Number(s.awal) || 0;
+  row.masuk = Number(s.masuk) || 0;
+  row.keluar = Number(s.keluar) || 0;
+  row.akhir = (row.awal + row.masuk) - row.keluar;
+  row.isManualAwal = true;
+  row.isManualAkhir = false;
+  row.ket = s.keterangan || '';
+
+  excelMatrixData[key][itemId][t.day] = row;
+}
+
 function renderExcelMatrix() {
   const year = Number(document.getElementById('selectTahunExcel').value);
   const month = Number(document.getElementById('selectBulanExcel').value);
   const key = getKeyYearMonth(year, month);
   const totalDays = getDaysInMonth(year, month);
-  
+
+  const today = getTodayParts();
+  if (year === today.year && month === today.month) {
+    STOCK_ITEMS.forEach(function(item) {
+      syncTodayStockToMatrix(item.id);
+    });
+    saveJSON('excel-matrix-data', excelMatrixData);
+  }
+
   const monthData = excelMatrixData[key] || {};
   const container = document.getElementById('excelItemSheetsContainer');
 
-  const itemsToRender = selectedFilterItem === 'all' 
-    ? STOCK_ITEMS 
+  const itemsToRender = selectedFilterItem === 'all'
+    ? STOCK_ITEMS
     : STOCK_ITEMS.filter(i => i.id === selectedFilterItem);
 
   if (itemsToRender.length === 0) {
@@ -1526,7 +1569,7 @@ function renderExcelMatrix() {
 
     for (let d = 1; d <= totalDays; d++) {
       const dayObj = itemData[d] || { awal: '', masuk: '', keluar: '', akhir: '', ket: '' };
-      
+
       const valAwal = dayObj.awal;
       const valMasuk = dayObj.masuk;
       const valKeluar = dayObj.keluar;
@@ -1539,8 +1582,8 @@ function renderExcelMatrix() {
       tbodyHtml += `<tr>
         <td style="font-weight:bold; background:#f8f9fa;">${d}</td>
         <td><input class="cell-input" type="text" value="${valAwal !== '' ? format(valAwal) : ''}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'awal')"></td>
-        <td><input class="cell-input" type="text" value="${valMasuk !== '' ? format(valMasuk) : ''}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'masuk')"></td>
-        <td><input class="cell-input" type="text" value="${valKeluar !== '' ? format(valKeluar) : ''}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'keluar')"></td>
+        <td><input class="cell-input" type="text" value="${valMasuk !== '' ? format(valMasuk) : ''}" ${year === getTodayParts().year && month === getTodayParts().month && d === getTodayParts().day ? 'readonly title="Otomatis dari Stok Barang"' : ''} onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'masuk')"></td>
+        <td><input class="cell-input" type="text" value="${valKeluar !== '' ? format(valKeluar) : ''}" ${year === getTodayParts().year && month === getTodayParts().month && d === getTodayParts().day ? 'readonly title="Otomatis dari Stok Barang"' : ''} onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'keluar')"></td>
         <td><input class="cell-input" type="text" value="${valAkhir !== '' ? format(valAkhir) : ''}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'akhir')"></td>
         <td><input class="cell-input text-left" type="text" value="${escapeHTML(valKet)}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'ket')"></td>
       </tr>`;
@@ -1578,58 +1621,92 @@ function onMatrixCellChange(input, year, month, itemId, day, fieldKey) {
   if (!excelMatrixData[key]) excelMatrixData[key] = {};
   if (!excelMatrixData[key][itemId]) excelMatrixData[key][itemId] = {};
   if (!excelMatrixData[key][itemId][day]) {
-    excelMatrixData[key][itemId][day] = { awal: '', masuk: '', keluar: '', akhir: '', isManualAwal: false, isManualAkhir: false, ket: '' };
+    excelMatrixData[key][itemId][day] = {
+      awal: '', masuk: '', keluar: '', akhir: '',
+      isManualAwal: false, isManualAkhir: false, ket: ''
+    };
   }
 
   const dayObj = excelMatrixData[key][itemId][day];
-  
+
   if (fieldKey === 'ket') {
     dayObj.ket = input.value;
   } else {
-    var hasilAngka = hitungEkspresi(input.value);
+    const hasilAngka = hitungEkspresi(input.value);
+
     if (fieldKey === 'awal') {
       dayObj.awal = input.value !== '' ? hasilAngka : '';
       dayObj.isManualAwal = input.value !== '';
+
     } else if (fieldKey === 'akhir') {
-      dayObj.akhir = input.value !== '' ? hasilAngka : '';
-      dayObj.isManualAkhir = input.value !== '';
-    } else {
-      dayObj[fieldKey] = input.value !== '' ? hasilAngka : '';
+      /*
+       * RUMUS UTAMA:
+       * Awal 10, Masuk 0, Akhir diketik 5
+       * => Keluar otomatis = 10 + 0 - 5 = 5
+       *
+       * Jadi user cukup isi STOK AKHIR, kolom KELUAR langsung mengikuti.
+       */
+      if (input.value !== '') {
+        dayObj.akhir = hasilAngka;
+
+        const awal = dayObj.awal !== '' ? Number(dayObj.awal) : 0;
+        const masuk = dayObj.masuk !== '' ? Number(dayObj.masuk) : 0;
+        dayObj.keluar = (awal + masuk) - Number(dayObj.akhir);
+
+        // Akhir bukan lagi "manual patokan"; keluar menjadi hasil perhitungan.
+        dayObj.isManualAkhir = false;
+      } else {
+        dayObj.akhir = '';
+        dayObj.keluar = '';
+        dayObj.isManualAkhir = false;
+      }
+
+    } else if (fieldKey === 'masuk') {
+      dayObj.masuk = input.value !== '' ? hasilAngka : '';
+
+      // Jika Akhir sudah ada, perubahan Masuk otomatis mengubah Keluar.
+      if (dayObj.akhir !== '') {
+        const awal = dayObj.awal !== '' ? Number(dayObj.awal) : 0;
+        const masuk = dayObj.masuk !== '' ? Number(dayObj.masuk) : 0;
+        const akhir = Number(dayObj.akhir);
+        dayObj.keluar = (awal + masuk) - akhir;
+      }
+
+    } else if (fieldKey === 'keluar') {
+      dayObj.keluar = input.value !== '' ? hasilAngka : '';
+
+      // Jika Keluar diubah, Akhir otomatis dihitung.
+      if (dayObj.keluar !== '') {
+        const awal = dayObj.awal !== '' ? Number(dayObj.awal) : 0;
+        const masuk = dayObj.masuk !== '' ? Number(dayObj.masuk) : 0;
+        dayObj.akhir = (awal + masuk) - Number(dayObj.keluar);
+        dayObj.isManualAkhir = false;
+      }
     }
   }
 
+  // Rantai tanggal tetap dihitung.
   recalculateChain(year, month, itemId);
 
-  // SINKRON REALTIME: MATRIX -> STOK INPUT
-  // Berlaku untuk semua perubahan di bulan berjalan, bukan cuma baris hari ini —
-  // supaya koreksi Akhir di tanggal lain (yang ikut mengubah rantai Awal hari ini)
-  // tetap ter-refresh ke halaman Stok Barang.
+  // SINKRON MATRIX -> STOK BARANG untuk hari ini.
   var t = getTodayParts();
   if (Number(year) === t.year && Number(month) === t.month && stockState[itemId]) {
     var todayObj = excelMatrixData[key][itemId][t.day];
+
     if (todayObj) {
       var s = stockState[itemId];
 
-      if (todayObj.isManualAkhir) {
-        // Akhir hari ini diisi manual (mis. hasil stok opname) -> jadikan ini
-        // patokan stok saat ini. Reset Masuk & Keluar supaya rumus
-        // Awal+Masuk-Keluar=Akhir tetap konsisten dan input berikutnya di
-        // halaman Stok tidak jadi minus.
-        var akhirManual = todayObj.akhir !== '' ? Number(todayObj.akhir) : 0;
-        s.awal = akhirManual;
-        s.masuk = 0;
-        s.keluar = 0;
-        s.akhir = akhirManual;
-      } else {
-        s.awal = todayObj.awal !== '' ? Number(todayObj.awal) : 0;
-        s.masuk = todayObj.masuk !== '' ? Number(todayObj.masuk) : 0;
-        s.keluar = todayObj.keluar !== '' ? Number(todayObj.keluar) : 0;
-        s.akhir = (s.awal + s.masuk) - s.keluar;
-      }
+      s.awal = todayObj.awal !== '' ? Number(todayObj.awal) : 0;
+      s.masuk = todayObj.masuk !== '' ? Number(todayObj.masuk) : 0;
+      s.keluar = todayObj.keluar !== '' ? Number(todayObj.keluar) : 0;
+      s.akhir = (s.awal + s.masuk) - s.keluar;
       s.keterangan = todayObj.ket || '';
+
       saveJSON('stock-state', stockState);
     }
   }
+
+  saveJSON('excel-matrix-data', excelMatrixData);
 
   renderStockInputs();
   renderChart();
