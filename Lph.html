@@ -14,8 +14,6 @@
   --text-main: #1f1a17;
   --text-sub: #8a7f6c;
   --border: #ece6da;
-  --green: #1b5e20;
-  --green-bg: #e8f5e9;
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -25,6 +23,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   display: flex; justify-content: center; min-height: 100vh;
 }
+
 .container {
   width: 100%; max-width: 430px; background: var(--bg-app);
   border-radius: 16px; padding: 12px; box-shadow: 0 0 30px rgba(0,0,0,0.5);
@@ -52,28 +51,37 @@ table { width: 100%; border-collapse: collapse; font-size: 11px; table-layout: f
 
 th {
   background: #faf8f5; color: var(--text-sub); font-weight: 800;
-  font-size: 9px; padding: 6px 6px; border-bottom: 1px solid var(--border);
+  font-size: 9px; padding: 6px 4px; border-bottom: 1px solid var(--border);
   text-transform: uppercase;
 }
 
-td { padding: 6px 6px; border-bottom: 1px solid #f7f3eb; vertical-align: middle; }
+td { padding: 6px 4px; border-bottom: 1px solid #f7f3eb; vertical-align: middle; }
 
 input[type="text"], input[type="number"] {
   width: 100%; border: 1px solid #e0d7cb; border-radius: 6px;
-  padding: 5px 6px; font-family: monospace; font-size: 11px; font-weight: 700;
+  padding: 5px 4px; font-family: monospace; font-size: 11px; font-weight: 700;
   background: #fdfbf7; color: var(--text-main); outline: none;
+}
+
+/* HARGA DIBIKIN BISA DIEDIT (INPUT EDITABLE) */
+input.price {
+  background: #fffdf5;
+  border: 1px solid #dcd0b9;
+  color: #8f080d;
 }
 
 input:focus { border-color: var(--primary-red); background: #fff; }
 
-input[readonly] {
-  background: transparent; border: none; color: #1f1a17; cursor: default;
+.qty-input { text-align: center; font-weight: 800; }
+
+/* SUBTOTAL SANGAT KELIATAN JELAS */
+.subtotal-val {
+  font-size: 11px; font-weight: 900; color: #1f1a17;
+  font-family: monospace; text-align: right; display: block;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-.qty-input { text-align: center; font-weight: 800; }
-.subtotal-input { text-align: right; font-weight: 800; color: #2c2520; }
-
-/* TOTAL ROW - KELIATAN JELAS DAN GEDE */
+/* TOTAL ROW */
 .total-row {
   background: #1f1a17 !important; color: #fff;
 }
@@ -88,7 +96,7 @@ input[readonly] {
   text-align: right; font-family: monospace; display: block; width: 100%;
 }
 
-/* STICKY CARD HASIL BERSIH (NET) DI BAWAH */
+/* STICKY BOTTOM BAR HASIL BERSIH */
 .net-card {
   position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
   width: calc(100% - 24px); max-width: 430px;
@@ -126,48 +134,48 @@ input[readonly] {
     <table id="tbl-enakko">
       <thead>
         <tr>
-          <th style="width: 40%;" class="text-left">Menu</th>
-          <th style="width: 22%;" class="text-right">Harga</th>
+          <th style="width: 32%;" class="text-left">Menu</th>
+          <th style="width: 25%;" class="text-right">Harga</th>
           <th style="width: 13%;" class="text-center">Pcs</th>
-          <th style="width: 25%;" class="text-right">Subtotal</th>
+          <th style="width: 30%;" class="text-right">Subtotal</th>
         </tr>
       </thead>
       <tbody>
         <tr class="item-row">
           <td class="text-left">Original 1 ekor</td>
-          <td><input type="number" class="price text-right" value="65000" readonly></td>
+          <td><input type="number" class="price text-right" value="69000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><input type="text" class="subtotal subtotal-input" value="Rp 0" readonly></td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
         <tr class="item-row">
           <td class="text-left">Original ½ ekor</td>
-          <td><input type="number" class="price text-right" value="33000" readonly></td>
+          <td><input type="number" class="price text-right" value="35000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><input type="text" class="subtotal subtotal-input" value="Rp 0" readonly></td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
         <tr class="item-row">
           <td class="text-left">Original ¼ ekor</td>
-          <td><input type="number" class="price text-right" value="19000" readonly></td>
+          <td><input type="number" class="price text-right" value="20000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><input type="text" class="subtotal subtotal-input" value="Rp 0" readonly></td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
         <tr class="item-row">
           <td class="text-left">Western 1 ekor</td>
-          <td><input type="number" class="price text-right" value="65000" readonly></td>
+          <td><input type="number" class="price text-right" value="69000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><input type="text" class="subtotal subtotal-input" value="Rp 0" readonly></td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
         <tr class="item-row">
           <td class="text-left">Western ½ ekor</td>
-          <td><input type="number" class="price text-right" value="35000" readonly></td>
+          <td><input type="number" class="price text-right" value="35000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><input type="text" class="subtotal subtotal-input" value="Rp 0" readonly></td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
         <tr class="item-row">
           <td class="text-left">Western ¼ ekor</td>
-          <td><input type="number" class="price text-right" value="20000" readonly></td>
+          <td><input type="number" class="price text-right" value="20000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><input type="text" class="subtotal subtotal-input" value="Rp 0" readonly></td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
       </tbody>
     </table>
@@ -228,11 +236,11 @@ input[readonly] {
           <td><input type="number" class="expense-price text-right" placeholder="0"></td>
         </tr>
         <tr class="expense-row">
-          <td><input type="text" placeholder="Kemasan / Box"></td>
+          <td><input type="text" placeholder="..."></td>
           <td><input type="number" class="expense-price text-right" placeholder="0"></td>
         </tr>
         <tr class="expense-row">
-          <td><input type="text" placeholder="Gas / Arang / Listrik"></td>
+          <td><input type="text" placeholder="..."></td>
           <td><input type="number" class="expense-price text-right" placeholder="0"></td>
         </tr>
       </tbody>
@@ -270,7 +278,7 @@ function calculateSalesEnakko() {
     const price = parseFloat(row.querySelector('.price').value) || 0;
     const qty = parseFloat(row.querySelector('.qty').value) || 0;
     const subtotal = price * qty;
-    row.querySelector('.subtotal').value = formatRupiah(subtotal);
+    row.querySelector('.subtotal').textContent = formatRupiah(subtotal);
     totalEnakko += subtotal;
   });
   document.getElementById('grand-enakko').textContent = formatRupiah(totalEnakko);
