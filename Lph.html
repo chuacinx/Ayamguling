@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Laporan Penjualan & Pengeluaran - AGE MT. Haryono</title>
+<style>
+:root {
+  --primary-red: #d71920;
+  --dark-red: #8f080d;
+  --gold: #ffc837;
+  --bg-app: #f7f5f0;
+  --surface: #ffffff;
+  --text-main: #1f1a17;
+  --text-sub: #8a7f6c;
+  --border: #ece6da;
+  --green: #1b5e20;
+  --green-bg: #e8f5e9;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  margin: 0; padding: 12px 12px 100px 12px; background: #0a0102; color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  display: flex; justify-content: center; min-height: 100vh;
+}
+.container {
+  width: 100%; max-width: 430px; background: var(--bg-app);
+  border-radius: 16px; padding: 12px; box-shadow: 0 0 30px rgba(0,0,0,0.5);
+  display: flex; flex-direction: column; gap: 12px; position: relative;
+}
+
+.header {
+  text-align: center; padding: 6px 0; border-bottom: 2px solid var(--border);
+}
+.header h1 { margin: 0; font-size: 16px; font-weight: 900; color: var(--dark-red); }
+.header p { margin: 2px 0 0; font-size: 10px; color: var(--text-sub); font-weight: 600; }
+
+.card {
+  background: var(--surface); border-radius: 12px;
+  border: 1px solid var(--border); overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+}
+
+.card-title {
+  background: var(--dark-red); color: #fff; padding: 8px 12px;
+  font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 11px; table-layout: fixed; }
+
+th {
+  background: #faf8f5; color: var(--text-sub); font-weight: 800;
+  font-size: 9px; padding: 6px 6px; border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+}
+
+td { padding: 6px 6px; border-bottom: 1px solid #f7f3eb; vertical-align: middle; }
+
+input[type="text"], input[type="number"] {
+  width: 100%; border: 1px solid #e0d7cb; border-radius: 6px;
+  padding: 5px 6px; font-family: monospace; font-size: 11px; font-weight: 700;
+  background: #fdfbf7; color: var(--text-main); outline: none;
+}
+
+input:focus { border-color: var(--primary-red); background: #fff; }
+
+input[readonly] {
+  background: transparent; border: none; color: #1f1a17; cursor: default;
+}
+
+.qty-input { text-align: center; font-weight: 800; }
+.subtotal-input { text-align: right; font-weight: 800; color: #2c2520; }
+
+/* TOTAL ROW - KELIATAN JELAS DAN GEDE */
+.total-row {
+  background: #1f1a17 !important; color: #fff;
+}
+.total-row td {
+  padding: 10px 8px; border-top: 1px solid var(--border);
+}
+.total-label {
+  font-size: 10px; font-weight: 800; color: #d1c7b7; letter-spacing: 0.5px;
+}
+.total-val {
+  font-size: 15px; font-weight: 900; color: var(--gold);
+  text-align: right; font-family: monospace; display: block; width: 100%;
+}
+
+/* STICKY CARD HASIL BERSIH (NET) DI BAWAH */
+.net-card {
+  position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 24px); max-width: 430px;
+  background: #112a14; border: 2px solid #2e7d32; padding: 10px 16px;
+  border-radius: 14px; display: flex; justify-content: space-between; align-items: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6); z-index: 99;
+}
+.net-title { font-size: 11px; font-weight: 900; color: #81c784; text-transform: uppercase; }
+.net-value { font-size: 20px; font-weight: 900; font-family: monospace; color: #a5d6a7; }
+
+.add-btn {
+  background: #f1ece4; border: 1px solid #dcd3c4; border-radius: 6px;
+  color: #4a4235; font-weight: 800; font-size: 10px; padding: 6px 8px;
+  cursor: pointer; margin: 8px; width: calc(100% - 16px);
+}
+.add-btn:active { transform: scale(0.98); }
+
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>AYAM GULING ENAKKO</h1>
+    <p>Laporan Penjualan & Pengeluaran Harian</p>
+  </div>
+
+  <!-- 1. OUTLET OFFLINE -->
+  <div class="card">
+    <div class="card-title">🍗 Penjualan Outlet (Offline)</div>
+    <table id="tbl-enakko">
+      <thead>
+        <tr>
+          <th style="width: 40%;" class="text-left">Menu</th>
+          <th style="width: 22%;" class="text-right">Harga</th>
+          <th style="width: 13%;" class="text-center">Pcs</th>
+          <th style="width: 25%;" class="text-right">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="item-row">
+          <td class="text-left">Original 1 ekor</td>
+          <td><input type="number" class="price text-right" value="65000" readonly></td>
+          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td><input type="text" class="subtotal subtotal-input" value="Rp 0" readonly></td>
+        </tr>
+        <tr class="item-row">
+          <td class="text-left">Original ½ ekor</td>
+          <td><input type="number" class="price text-right" value="33000" readonly></td>
+          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td><input type="text" class="subtotal subtotal-input" value="Rp 0" readonly></td>
+        </tr>
+        <tr class="item-row">
+          <td class="text-left">Original ¼ ekor</td>
+          <td><input type="number" class="price text-right" value="19000" readonly></td>
+          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td><input type="text" class="subtotal subtotal-input" value="Rp 0" readonly></td>
+        </tr>
+        <tr class="item-row">
+          <td class="text-left">Western 1 ekor</td>
+          <td><input type="number" class="price text-right" value="65000" readonly></td>
+          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td><input type="text" class="subtotal subtotal-input" value="Rp 0" readonly></td>
+        </tr>
+        <tr class="item-row">
+          <td class="text-left">Western ½ ekor</td>
+          <td><input type="number" class="price text-right" value="35000" readonly></td>
+          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td><input type="text" class="subtotal subtotal-input" value="Rp 0" readonly></td>
+        </tr>
+        <tr class="item-row">
+          <td class="text-left">Western ¼ ekor</td>
+          <td><input type="number" class="price text-right" value="20000" readonly></td>
+          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td><input type="text" class="subtotal subtotal-input" value="Rp 0" readonly></td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tr class="total-row">
+        <td style="width: 50%;" class="total-label">TOTAL OUTLET</td>
+        <td style="width: 50%;"><span id="grand-enakko" class="total-val">Rp 0</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 2. PENJUALAN ONLINE -->
+  <div class="card">
+    <div class="card-title">🛵 Penjualan Online (Delivery)</div>
+    <table id="tbl-online">
+      <thead>
+        <tr>
+          <th style="width: 50%;" class="text-left">Platform</th>
+          <th style="width: 50%;" class="text-right">Omset</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="online-row">
+          <td class="text-left">GoFood</td>
+          <td><input type="number" class="online-price text-right" placeholder="0"></td>
+        </tr>
+        <tr class="online-row">
+          <td class="text-left">GrabFood</td>
+          <td><input type="number" class="online-price text-right" placeholder="0"></td>
+        </tr>
+        <tr class="online-row">
+          <td class="text-left">ShopeeFood</td>
+          <td><input type="number" class="online-price text-right" placeholder="0"></td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tr class="total-row">
+        <td style="width: 50%;" class="total-label">TOTAL ONLINE</td>
+        <td style="width: 50%;"><span id="grand-online" class="total-val">Rp 0</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 3. PENGELUARAN -->
+  <div class="card">
+    <div class="card-title">💸 Pengeluaran Operasional</div>
+    <table id="tbl-pengeluaran">
+      <thead>
+        <tr>
+          <th style="width: 50%;" class="text-left">Item Barang</th>
+          <th style="width: 50%;" class="text-right">Biaya</th>
+        </tr>
+      </thead>
+      <tbody id="expense-body">
+        <tr class="expense-row">
+          <td><input type="text" placeholder="Bahan Baku Ayam"></td>
+          <td><input type="number" class="expense-price text-right" placeholder="0"></td>
+        </tr>
+        <tr class="expense-row">
+          <td><input type="text" placeholder="Kemasan / Box"></td>
+          <td><input type="number" class="expense-price text-right" placeholder="0"></td>
+        </tr>
+        <tr class="expense-row">
+          <td><input type="text" placeholder="Gas / Arang / Listrik"></td>
+          <td><input type="number" class="expense-price text-right" placeholder="0"></td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="add-btn" onclick="addExpenseRow()">＋ Baris Pengeluaran Baru</button>
+    <table>
+      <tr class="total-row">
+        <td style="width: 50%;" class="total-label">TOTAL PENGELUARAN</td>
+        <td style="width: 50%;"><span id="grand-pengeluaran" class="total-val" style="color: #ff8a80;">Rp 0</span></td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- 4. HASIL BERSIH (STICKY BOTTOM BAR) -->
+<div class="net-card">
+  <div class="net-title">HASIL BERSIH (NET)</div>
+  <div class="net-value" id="net-penjualan">Rp 0</div>
+</div>
+
+<script>
+let totalEnakko = 0;
+let totalOnline = 0;
+let totalPengeluaran = 0;
+
+function formatRupiah(number) {
+  return "Rp " + new Intl.NumberFormat('id-ID').format(number);
+}
+
+function calculateSalesEnakko() {
+  const rows = document.querySelectorAll('#tbl-enakko .item-row');
+  totalEnakko = 0;
+  rows.forEach(row => {
+    const price = parseFloat(row.querySelector('.price').value) || 0;
+    const qty = parseFloat(row.querySelector('.qty').value) || 0;
+    const subtotal = price * qty;
+    row.querySelector('.subtotal').value = formatRupiah(subtotal);
+    totalEnakko += subtotal;
+  });
+  document.getElementById('grand-enakko').textContent = formatRupiah(totalEnakko);
+}
+
+function calculateOnline() {
+  const rows = document.querySelectorAll('.online-row');
+  totalOnline = 0;
+  rows.forEach(row => {
+    const price = parseFloat(row.querySelector('.online-price').value) || 0;
+    totalOnline += price;
+  });
+  document.getElementById('grand-online').textContent = formatRupiah(totalOnline);
+}
+
+function calculateExpenses() {
+  const rows = document.querySelectorAll('.expense-row');
+  totalPengeluaran = 0;
+  rows.forEach(row => {
+    const price = parseFloat(row.querySelector('.expense-price').value) || 0;
+    totalPengeluaran += price;
+  });
+  document.getElementById('grand-pengeluaran').textContent = formatRupiah(totalPengeluaran);
+}
+
+function calculateNet() {
+  const netTotal = (totalEnakko + totalOnline) - totalPengeluaran;
+  document.getElementById('net-penjualan').textContent = formatRupiah(netTotal);
+}
+
+function addExpenseRow() {
+  const tbody = document.getElementById('expense-body');
+  const tr = document.createElement('tr');
+  tr.className = 'expense-row';
+  tr.innerHTML = `
+    <td><input type="text" placeholder="Pengeluaran Lainnya"></td>
+    <td><input type="number" class="expense-price text-right" placeholder="0"></td>
+  `;
+  tbody.appendChild(tr);
+}
+
+document.addEventListener('input', function() {
+  calculateSalesEnakko();
+  calculateOnline();
+  calculateExpenses();
+  calculateNet();
+});
+</script>
+
+</body>
+</html>
