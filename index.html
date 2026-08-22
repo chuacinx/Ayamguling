@@ -84,9 +84,33 @@ html, body {
 }
 
 /* ========= HEADER & TITLES ========= */
-.header { margin-bottom: 10px; }
+.header {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.header-info { min-width: 0; }
 .header h1 { margin: 0; font-size: 18px; font-weight: 900; color: var(--dark-red); }
 .header p { margin: 1px 0 0; color: var(--text-sub); font-size: 10px; font-weight: 500; }
+.lph-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 58px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--dark-red);
+  color: #fff;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 900;
+  box-shadow: 0 3px 8px rgba(143,8,13,.18);
+}
+.lph-btn:active { transform: scale(.96); }
 
 .section-title {
   font-size: 11px; font-weight: 800; color: var(--text-main);
@@ -359,8 +383,11 @@ td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-s
         </div>
 
         <div class="header">
-          <h1>AGE MT. HARYONO</h1>
-          <p>Kalkulator penjualan & ringkasan stok hari ini</p>
+          <div class="header-info">
+            <h1>AGE MT. HARYONO</h1>
+            <p>Kalkulator penjualan & ringkasan stok hari ini</p>
+          </div>
+          <a class="lph-btn" href="Lph.html">LPH</a>
         </div>
 
         <div class="section-title">🧮 Kalkulator Ayam <small>Hitung & simpan</small></div>
@@ -540,7 +567,7 @@ const DEFAULT_STOCK_ITEMS = [
   { id:'ayam',           nama:'Ayam',              unit:'ekor',  icon:'🐔', color:'#d71920' },
   { id:'berasPutih',     nama:'Beras Putih',       unit:'kg',    icon:'🍚', color:'#c9a227' },
   { id:'berasBasmati',   nama:'Beras Basmati',     unit:'kg',    icon:'🌾', color:'#8a6d3b' },
-  { id:'oli',            nama:'Oliv oil',          unit:'ml', icon:'🛢️', color:'#3f6b4a' },
+  { id:'oli',            nama:'Oliv oil',          unit:'liter', icon:'🛢️', color:'#3f6b4a' },
   { id:'airMineral',     nama:'Air Mineral',       unit:'botol', icon:'💧', color:'#2f7d9e' },
   { id:'tehBotolSosro',  nama:'Teh Botol Sosro',   unit:'botol', icon:'🍵', color:'#a35b1f' },
 ];
@@ -1263,9 +1290,39 @@ function renderChart() {
   var canvas = document.getElementById('stockChart');
   if (!canvas || typeof Chart === 'undefined') return;
 
-  var labels = STOCK_ITEMS.map(i => i.icon + ' ' + i.nama);
-  var data = STOCK_ITEMS.map(i => stockState[i.id] ? (Number(stockState[i.id].akhir) || 0) : 0);
-  var colors = STOCK_ITEMS.map(i => i.color);
+  /* DIAGRAM BERANDA — SUMBER UTAMA DARI RIWAYAT STOCK BARANG
+     Ambil nilai AKHIR terbaru dari matrix/riwayat stock bulan berjalan.
+     Jadi diagram selalu mengikuti data Riwayat Stock Barang, bukan data
+     input stok terpisah. */
+  var today = new Date();
+  var key = getKeyYearMonth(today.getFullYear(), today.getMonth() + 1);
+  var monthData = excelMatrixData[key] || {};
+
+  var labels = [];
+  var data = [];
+  var colors = [];
+
+  STOCK_ITEMS.forEach(function(item) {
+    var itemData = monthData[item.id] || {};
+    var latestDay = 0;
+    var latestValue = 0;
+
+    Object.keys(itemData).forEach(function(day) {
+      var d = Number(day);
+      var row = itemData[day];
+      if (!row || isNaN(d)) return;
+      if (row.akhir !== '' && d >= latestDay) {
+        latestDay = d;
+        latestValue = Number(row.akhir) || 0;
+      }
+    });
+
+    /* Kalau belum ada riwayat bulan ini, tampilkan 0.
+       Jangan mengambil stockState agar sumber diagram tetap konsisten. */
+    labels.push(item.icon + ' ' + item.nama);
+    data.push(latestValue);
+    colors.push(item.color);
+  });
 
   if (stockChartInstance) {
     stockChartInstance.data.labels = labels;
@@ -1275,24 +1332,59 @@ function renderChart() {
   } else {
     stockChartInstance = new Chart(canvas, {
       type: 'bar',
-      data: { labels: labels, datasets: [{ label: 'Stok saat ini', data: data, backgroundColor: colors, borderRadius: 4, maxBarThickness: 14 }] },
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Stok akhir',
+          data: data,
+          backgroundColor: colors,
+          borderRadius: 8,
+          borderSkipped: false,
+          barThickness: 16,
+          maxBarThickness: 18
+        }]
+      },
       options: {
-        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 350 },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            displayColors: false,
+            callbacks: {
+              label: function(ctx) {
+                var item = STOCK_ITEMS[ctx.dataIndex];
+                return ' ' + format(ctx.parsed.x) + ' ' + (item ? item.unit : '');
+              }
+            }
+          }
+        },
         scales: {
-          x: { beginAtZero: true, grid: { color: '#eee9df' }, ticks: { font: { size: 8 } } },
-          y: { grid: { display: false }, ticks: { font: { size: 9 } } }
+          x: {
+            beginAtZero: true,
+            grid: { color: '#eee9df' },
+            ticks: { font: { size: 9 } }
+          },
+          y: {
+            grid: { display: false },
+            ticks: { font: { size: 9 }, padding: 4 }
+          }
         }
       }
     });
   }
 
   var legend = document.getElementById('legendList');
-  legend.innerHTML = STOCK_ITEMS.map((item, idx) => 
-    '<div class="legend-row"><div class="legend-dot" style="background:' + item.color + '"></div>' +
-    '<div class="legend-name">' + item.nama + '</div>' +
-    '<div class="legend-val">' + format(data[idx]) + ' ' + item.unit + '</div></div>'
-  ).join('');
+  if (!legend) return;
+  legend.innerHTML = STOCK_ITEMS.map(function(item, idx) {
+    return '<div class="legend-row">' +
+      '<div class="legend-dot" style="background:' + item.color + '"></div>' +
+      '<div class="legend-name">' + escapeHTML(item.nama) + '</div>' +
+      '<div class="legend-val">' + format(data[idx]) + ' ' + item.unit + '</div>' +
+      '</div>';
+  }).join('');
 }
 
 function escapeHTML(value) {
