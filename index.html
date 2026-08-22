@@ -1502,27 +1502,22 @@ function syncTodayStockToMatrix(itemId) {
   if (!excelMatrixData[key]) excelMatrixData[key] = {};
   if (!excelMatrixData[key][itemId]) excelMatrixData[key][itemId] = {};
 
-  var row = excelMatrixData[key][itemId][t.day] || {
-    awal: '', masuk: '', keluar: '', akhir: '',
-    isManualAwal: false, isManualAkhir: false, ket: ''
-  };
+  var row = excelMatrixData[key][itemId][t.day];
 
-  /*
-   * Hari ini selalu mengikuti halaman Stok Barang:
-   * - Awal  -> stok awal
-   * - Masuk -> otomatis dari input Masuk
-   * - Keluar -> otomatis dari input Terpakai/Keluar
-   * - Akhir -> otomatis dari rumus
-   */
-  row.awal = Number(s.awal) || 0;
-  row.masuk = Number(s.masuk) || 0;
-  row.keluar = Number(s.keluar) || 0;
-  row.akhir = (row.awal + row.masuk) - row.keluar;
-  row.isManualAwal = true;
-  row.isManualAkhir = false;
-  row.ket = s.keterangan || '';
-
-  excelMatrixData[key][itemId][t.day] = row;
+  // Jangan menimpa data Matrix yang sudah diketik.
+  // Hanya buat baris baru jika memang belum ada.
+  if (!row) {
+    row = {
+      awal: Number(s.awal) || 0,
+      masuk: Number(s.masuk) || 0,
+      keluar: Number(s.keluar) || 0,
+      akhir: (Number(s.awal) || 0) + (Number(s.masuk) || 0) - (Number(s.keluar) || 0),
+      isManualAwal: false,
+      isManualAkhir: false,
+      ket: s.keterangan || ''
+    };
+    excelMatrixData[key][itemId][t.day] = row;
+  }
 }
 
 function renderExcelMatrix() {
@@ -1582,8 +1577,8 @@ function renderExcelMatrix() {
       tbodyHtml += `<tr>
         <td style="font-weight:bold; background:#f8f9fa;">${d}</td>
         <td><input class="cell-input" type="text" value="${valAwal !== '' ? format(valAwal) : ''}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'awal')"></td>
-        <td><input class="cell-input" type="text" value="${valMasuk !== '' ? format(valMasuk) : ''}" ${year === getTodayParts().year && month === getTodayParts().month && d === getTodayParts().day ? 'readonly title="Otomatis dari Stok Barang"' : ''} onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'masuk')"></td>
-        <td><input class="cell-input" type="text" value="${valKeluar !== '' ? format(valKeluar) : ''}" ${year === getTodayParts().year && month === getTodayParts().month && d === getTodayParts().day ? 'readonly title="Otomatis dari Stok Barang"' : ''} onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'keluar')"></td>
+        <td><input class="cell-input" type="text" value="${valMasuk !== '' ? format(valMasuk) : ''}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'masuk')"></td>
+        <td><input class="cell-input" type="text" value="${valKeluar !== '' ? format(valKeluar) : ''}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'keluar')"></td>
         <td><input class="cell-input" type="text" value="${valAkhir !== '' ? format(valAkhir) : ''}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'akhir')"></td>
         <td><input class="cell-input text-left" type="text" value="${escapeHTML(valKet)}" onchange="onMatrixCellChange(this, ${year}, ${month}, '${item.id}', ${d}, 'ket')"></td>
       </tr>`;
