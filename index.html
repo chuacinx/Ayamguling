@@ -43,7 +43,7 @@ html, body {
   display: flex; flex-direction: column;
 }
 
-/* ========= SLIDE PAGE CONTAINMENT (BATAS SCROLL) ========= */
+/* ========= SLIDE PAGE CONTAINMENT ========= */
 .pages-container {
   display: flex; width: 300%; height: calc(100vh - 76px);
   transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
@@ -57,7 +57,7 @@ html, body {
 
 .pagewrap { padding: 12px 12px 20px; }
 
-/* ========= BANNER SIMPEL ========= */
+/* ========= BANNER ========= */
 .banner {
   width: 100%; height: 180px; border-radius: 16px;
   overflow: hidden; position: relative; margin-bottom: 12px;
@@ -95,7 +95,7 @@ html, body {
 }
 .section-title small { font-weight: 500; color: var(--text-sub); font-size: 9px; text-transform: none; }
 
-/* ========= CARDS SIMPEL ========= */
+/* ========= CARDS ========= */
 .card {
   background: var(--surface); border-radius: 14px; margin-bottom: 10px;
   border: 1px solid var(--border); overflow: hidden;
@@ -163,6 +163,78 @@ html, body {
   margin: 8px 12px 10px; cursor: pointer; box-shadow: 0 3px 10px rgba(215,25,32,0.2);
 }
 
+/* ========= KELOLA STOK MASSAL (KOLOM DIBATASI & LEBIH RINGKAS) ========= */
+.bulk-stock-card { padding: 8px 10px; }
+.bulk-stock-title { font-size: 10px; font-weight: 800; margin-bottom: 2px; }
+.bulk-stock-desc { font-size: 8px; color: var(--text-sub); line-height: 1.2; margin-bottom: 4px; }
+.bulk-stock-textarea {
+  width: 100%; height: 42px; min-height: 42px; max-height: 80px; resize: vertical;
+  border: 1px solid #e0d7cb; border-radius: 6px; padding: 5px 7px;
+  font-size: 9px; font-family: inherit; background: #fdfbf7; outline: none;
+}
+.bulk-stock-textarea:focus { border-color: var(--primary-red); background: #fff; }
+.bulk-stock-actions { display: flex; gap: 4px; margin-top: 4px; }
+.bulk-stock-actions button {
+  flex: 1; height: 26px; border-radius: 6px; border: none;
+  font-size: 8.5px; font-weight: 800; cursor: pointer;
+}
+.bulk-stock-add {
+  background: linear-gradient(135deg, #d71920 0%, #9e0b11 100%);
+  color: #fff;
+}
+.bulk-stock-remove {
+  background: #fdf3f1; border: 1px solid #f0c9c5 !important;
+  color: #b3261e;
+}
+.bulk-stock-clear { background: #f1ece4; color: #4a4235; flex: 0.6 !important; }
+.bulk-stock-status {
+  min-height: 10px; text-align: center; font-size: 8px;
+  font-weight: 700; color: #137333; margin-top: 2px;
+}
+
+/* ========= STOCK GRID 2 KOLOM ========= */
+#stockCards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+#stockCards .card { margin-bottom: 0; min-width: 0; }
+#stockCards .card-head { padding: 7px 8px; }
+#stockCards .card-head-left { gap: 5px; min-width: 0; }
+#stockCards .card-head h2 {
+  font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#stockCards .card-head span { font-size: 7px; }
+#stockCards .icon { width: 24px; height: 24px; border-radius: 7px; font-size: 12px; }
+#stockCards .stock-body { padding: 0 8px 7px; }
+#stockCards .stock-line { padding: 5px 0; }
+#stockCards .stock-label { font-size: 9px; }
+#stockCards .number-input { width: 52px; height: 25px; font-size: 10px; }
+#stockCards .stock-total { margin-top: 5px; padding: 6px 7px; }
+#stockCards .stock-total label { font-size: 7px; }
+#stockCards .stock-total-input { width: 52px; height: 25px; font-size: 10px; }
+#stockCards .stock-unit-label { font-size: 8px; }
+#stockCards .note-input { height: 26px; margin-top: 5px; font-size: 8px; padding: 0 6px; }
+#stockCards .stock-item-save { height: 28px; margin: 5px 0 0; font-size: 8px; }
+
+/* ========= MATRIX PICKER ========= */
+.matrix-picker-row { display: flex; align-items: center; gap: 5px; margin: 8px 2px 5px; }
+.matrix-picker-label { font-size: 8px; color: var(--text-sub); font-weight: 700; white-space: nowrap; }
+.matrix-picker-select {
+  flex: 1; min-width: 0; height: 28px; border: 1px solid #dcd3c4;
+  border-radius: 7px; background: #fff; color: #3f382f;
+  font-size: 9px; font-weight: 700; padding: 0 7px; outline: none;
+}
+.matrix-picker-select:focus { border-color: var(--primary-red); }
+.matrix-picker-select.stock-select { max-width: 160px; }
+
+@media (max-width: 340px) {
+  #stockCards { gap: 6px; }
+  #stockCards .card-head h2 { font-size: 9px; }
+  #stockCards .number-input,
+  #stockCards .stock-total-input { width: 46px; }
+}
+
 /* ========= STOCK FORM ========= */
 .stock-body { padding: 0 12px 10px; }
 .stock-line { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #f7f3eb; }
@@ -188,14 +260,6 @@ html, body {
 .legend-name { flex: 1; color: #4a4235; font-weight: 600; }
 .legend-val { font-family: monospace; font-weight: 800; }
 
-.item-filter-tabs { display: flex; gap: 4px; overflow-x: auto; padding: 2px 2px 8px; scrollbar-width: none; }
-.item-filter-tabs::-webkit-scrollbar { display: none; }
-.tab-btn {
-  white-space: nowrap; background: #fff; border: 1px solid #e0d7cb; border-radius: 12px;
-  padding: 4px 10px; font-size: 10px; font-weight: 700; color: #554e42; cursor: pointer;
-}
-.tab-btn.active { background: var(--primary-red); color: #fff; border-color: var(--primary-red); }
-
 .riwayat-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; }
 .riwayat-head h2 { margin: 0; font-size: 12px; font-weight: 800; }
 .month-controls { display: flex; align-items: center; gap: 4px; }
@@ -214,7 +278,7 @@ table.excel-table tr:nth-child(even) td { background-color: #faf8f5; }
 td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-size: 10px; }
 .danger-btn { margin: 8px 12px; height: 30px; border-radius: 6px; border: 1px solid #f0c9c5; background: #fdf3f1; color: #b3261e; font-size: 10px; font-weight: 700; cursor: pointer; width: calc(100% - 24px); }
 
-/* ========= DESAIN BOTTOM NAV BAR ULTRA CLEAN ========= */
+/* ========= BOTTOM NAV BAR ========= */
 .bottomnav-wrapper {
   position: absolute; bottom: 12px; left: 0; right: 0;
   display: flex; justify-content: center; z-index: 100;
@@ -367,6 +431,21 @@ td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-s
           <p>Catat stok fisik tiap item</p>
         </div>
 
+        <div class="card bulk-stock-card">
+          <div class="bulk-stock-title">⚙️ Kelola Stok Massal (Tambah / Hapus)</div>
+          <div class="bulk-stock-desc">
+            Tulis 1 barang per baris. <i>Tambah:</i> Nama | Satuan. <i>Hapus:</i> Cukup nama barang.
+          </div>
+          <textarea id="bulkStockInput" class="bulk-stock-textarea"
+            placeholder="Minyak Goreng | liter&#10;Garam | pcs&#10;Kecap"></textarea>
+          <div class="bulk-stock-actions">
+            <button class="bulk-stock-add" onclick="tambahStockMassal()">＋ Tambah Massal</button>
+            <button class="bulk-stock-remove" onclick="hapusStockMassal()">🗑️ Hapus Massal</button>
+            <button class="bulk-stock-clear" onclick="document.getElementById('bulkStockInput').value=''">Bersihkan</button>
+          </div>
+          <div id="bulkStockStatus" class="bulk-stock-status"></div>
+        </div>
+
         <div id="stockCards"></div>
 
         <div class="stock-actions">
@@ -399,15 +478,18 @@ td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-s
           <button class="danger-btn" id="btnHapusPenjualan" onclick="hapusRiwayatPenjualan(this)">🗑️ Hapus Riwayat Penjualan</button>
         </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin: 12px 2px 4px;">
-          <div style="font-weight:800; font-size:11px;">📊 Matrix Stock barang</div>
+        <div style="display:flex; justify-space-between; align-items:center; margin: 12px 2px 4px;">
+          <div style="font-weight:800; font-size:11px;">📊 Matrix Stock</div>
           <div class="month-controls">
             <select class="filter-select" id="selectBulanExcel" onchange="renderExcelMatrix()"></select>
             <select class="filter-select" id="selectTahunExcel" onchange="renderExcelMatrix()"></select>
           </div>
         </div>
 
-        <div class="item-filter-tabs" id="itemFilterTabs"></div>
+        <div class="matrix-picker-row">
+          <span class="matrix-picker-label">📦 Pilih Stock</span>
+          <select class="matrix-picker-select stock-select" id="selectStockExcel" onchange="filterMatrixItem(this.value)"></select>
+        </div>
         <div id="excelItemSheetsContainer"></div>
 
         <div class="card" style="padding:12px;">
@@ -431,7 +513,7 @@ td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-s
 
   </div> <!-- END PAGES CONTAINER -->
 
-  <!-- FLOATING BOTTOM NAV BAR CLEAN -->
+  <!-- FLOATING BOTTOM NAV BAR -->
   <div class="bottomnav-wrapper">
     <nav class="bottomnav">
       <div class="nav-indicator" id="navIndicator"></div>
@@ -454,7 +536,7 @@ td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-s
 
 <script>
 /* KONFIGURASI ITEM STOCK */
-const STOCK_ITEMS = [
+const DEFAULT_STOCK_ITEMS = [
   { id:'ayam',           nama:'Ayam',              unit:'ekor',  icon:'🐔', color:'#d71920' },
   { id:'berasPutih',     nama:'Beras Putih',       unit:'kg',    icon:'🍚', color:'#c9a227' },
   { id:'berasBasmati',   nama:'Beras Basmati',     unit:'kg',    icon:'🌾', color:'#8a6d3b' },
@@ -463,12 +545,185 @@ const STOCK_ITEMS = [
   { id:'tehBotolSosro',  nama:'Teh Botol Sosro',   unit:'botol', icon:'🍵', color:'#a35b1f' },
 ];
 
+let STOCK_ITEMS = [];
 let stockState = {};
 let excelMatrixData = {}; 
 let riwayatPenjualan = [];
 let stockChartInstance = null;
 let confirmDeleteP = false;
 let selectedFilterItem = 'all';
+
+function getCustomStockItems() {
+  return loadJSON('custom-stock-items', []);
+}
+
+function rebuildStockItems() {
+  STOCK_ITEMS = DEFAULT_STOCK_ITEMS.concat(getCustomStockItems());
+}
+
+function makeStockId(nama) {
+  var base = String(nama).toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+    .replace(/-/g, '');
+  if (!base) base = 'stock';
+  var id = base;
+  var nomor = 2;
+  var ids = STOCK_ITEMS.map(function(item) { return item.id; });
+  while (ids.indexOf(id) !== -1) {
+    id = base + nomor;
+    nomor++;
+  }
+  return id;
+}
+
+function getAutoStockIcon(index) {
+  var icons = ['📦','🧂','🍬','🧴','🥫','🧅','🧄','🥬','🍋','🛒'];
+  return icons[index % icons.length];
+}
+
+function getAutoStockColor(index) {
+  var colors = ['#6b5b45','#7a6a3a','#8a5a44','#4f6b5a','#6a4f7a','#5c6f82','#806044','#486b6b'];
+  return colors[index % colors.length];
+}
+
+/* KELOLA KUSTOM STOK MASSAL (TAMBAH & HAPUS) */
+function tambahStockMassal() {
+  var textarea = document.getElementById('bulkStockInput');
+  var status = document.getElementById('bulkStockStatus');
+  if (!textarea || !status) return;
+
+  var raw = textarea.value || '';
+  var lines = raw.split(/\r?\n/)
+    .map(function(line) { return line.trim(); })
+    .filter(function(line) { return line.length > 0; });
+
+  if (!lines.length) {
+    status.style.color = '#b3261e';
+    status.textContent = 'Tulis minimal 1 nama barang.';
+    return;
+  }
+
+  var customItems = getCustomStockItems();
+  var existingNames = STOCK_ITEMS.map(function(item) {
+    return item.nama.trim().toLowerCase();
+  });
+  var added = [];
+  var skipped = 0;
+
+  lines.forEach(function(line) {
+    var parts = line.split('|');
+    var nama = (parts[0] || '').trim();
+    var unit = (parts[1] || 'pcs').trim() || 'pcs';
+
+    if (!nama) return;
+
+    var nameKey = nama.toLowerCase();
+    if (existingNames.indexOf(nameKey) !== -1) {
+      skipped++;
+      return;
+    }
+
+    var item = {
+      id: makeStockId(nama),
+      nama: nama,
+      unit: unit,
+      icon: getAutoStockIcon(customItems.length),
+      color: getAutoStockColor(customItems.length)
+    };
+
+    customItems.push(item);
+    existingNames.push(nameKey);
+    added.push(item);
+    STOCK_ITEMS.push(item);
+  });
+
+  if (!added.length) {
+    status.style.color = '#a36b00';
+    status.textContent = 'Tidak ada barang baru. Yang sama dilewati.';
+    return;
+  }
+
+  saveJSON('custom-stock-items', customItems);
+
+  added.forEach(function(item) {
+    if (!stockState[item.id]) {
+      stockState[item.id] = {
+        awal: 0, masuk: 0, akhir: 0, keluar: 0,
+        keterangan: '', tanggal: new Date().toDateString()
+      };
+    }
+  });
+  saveJSON('stock-state', stockState);
+
+  renderStockInputs();
+  renderFilterTabs();
+  renderExcelMatrix();
+  renderChart();
+
+  textarea.value = '';
+  status.style.color = '#137333';
+  status.textContent = '✓ ' + added.length + ' stock ditambahkan' + (skipped ? ' · ' + skipped + ' dilewati' : '') + '.';
+}
+
+function hapusStockMassal() {
+  var textarea = document.getElementById('bulkStockInput');
+  var status = document.getElementById('bulkStockStatus');
+  if (!textarea || !status) return;
+
+  var raw = textarea.value || '';
+  var lines = raw.split(/\r?\n/)
+    .map(function(line) { return line.split('|')[0].trim().toLowerCase(); })
+    .filter(function(line) { return line.length > 0; });
+
+  if (!lines.length) {
+    status.style.color = '#b3261e';
+    status.textContent = 'Tulis nama barang yang mau dihapus.';
+    return;
+  }
+
+  var customItems = getCustomStockItems();
+  var defaultIds = DEFAULT_STOCK_ITEMS.map(function(i) { return i.id; });
+  var removedCount = 0;
+  var cannotRemoveDefault = false;
+
+  var updatedCustom = customItems.filter(function(item) {
+    var matchName = item.nama.trim().toLowerCase();
+    if (lines.indexOf(matchName) !== -1) {
+      delete stockState[item.id];
+      removedCount++;
+      return false;
+    }
+    return true;
+  });
+
+  DEFAULT_STOCK_ITEMS.forEach(function(defItem) {
+    if (lines.indexOf(defItem.nama.trim().toLowerCase()) !== -1) {
+      cannotRemoveDefault = true;
+    }
+  });
+
+  if (removedCount === 0) {
+    status.style.color = '#a36b00';
+    status.textContent = cannotRemoveDefault 
+      ? 'Item bawaan sistem tidak dapat dihapus.' 
+      : 'Item tidak ditemukan di kustom stok.';
+    return;
+  }
+
+  saveJSON('custom-stock-items', updatedCustom);
+  saveJSON('stock-state', stockState);
+  rebuildStockItems();
+
+  renderStockInputs();
+  renderFilterTabs();
+  renderExcelMatrix();
+  renderChart();
+
+  textarea.value = '';
+  status.style.color = '#137333';
+  status.textContent = '✓ ' + removedCount + ' stok berhasil dihapus' + (cannotRemoveDefault ? ' (Barang bawaan diabaikan)' : '') + '.';
+}
 
 /* STORAGE HELPERS */
 function loadJSON(key, fallback) {
@@ -478,7 +733,7 @@ function loadJSON(key, fallback) {
   } catch (e) { return fallback; }
 }
 
-const SYNCED_KEYS = ['stock-state', 'excel-matrix-data', 'riwayat-penjualan'];
+const SYNCED_KEYS = ['stock-state', 'excel-matrix-data', 'riwayat-penjualan', 'custom-stock-items'];
 
 function saveJSON(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)); } 
@@ -560,7 +815,8 @@ async function pushState() {
   var combined = JSON.stringify({
     stockState: loadJSON('stock-state', {}),
     excelMatrixData: loadJSON('excel-matrix-data', {}),
-    riwayatPenjualan: loadJSON('riwayat-penjualan', [])
+    riwayatPenjualan: loadJSON('riwayat-penjualan', []),
+    customStockItems: loadJSON('custom-stock-items', [])
   });
   try {
     var res = await fetch('/api/state', {
@@ -598,6 +854,7 @@ async function pullState(silent) {
     if (parsed.stockState) { stockState = parsed.stockState; localStorage.setItem('stock-state', JSON.stringify(parsed.stockState)); }
     if (parsed.excelMatrixData) { excelMatrixData = parsed.excelMatrixData; localStorage.setItem('excel-matrix-data', JSON.stringify(parsed.excelMatrixData)); }
     if (parsed.riwayatPenjualan) { riwayatPenjualan = parsed.riwayatPenjualan; localStorage.setItem('riwayat-penjualan', JSON.stringify(parsed.riwayatPenjualan)); }
+    if (parsed.customStockItems) { localStorage.setItem('custom-stock-items', JSON.stringify(parsed.customStockItems)); rebuildStockItems(); }
     lastSyncedAt = data.updatedAt;
 
     renderStockInputs();
@@ -980,13 +1237,16 @@ function escapeHTML(value) {
 
 /* FILTER TABS */
 function renderFilterTabs() {
-  const container = document.getElementById('itemFilterTabs');
-  if (!container) return;
-  let tabsHtml = `<button class="tab-btn ${selectedFilterItem === 'all' ? 'active' : ''}" onclick="filterMatrixItem('all')">✨ Semua</button>`;
-  STOCK_ITEMS.forEach(item => {
-    tabsHtml += `<button class="tab-btn ${selectedFilterItem === item.id ? 'active' : ''}" onclick="filterMatrixItem('${item.id}')">${item.icon} ${item.nama}</button>`;
+  const select = document.getElementById('selectStockExcel');
+  if (!select) return;
+
+  let options = `<option value="all">✨ Semua Stock</option>`;
+  STOCK_ITEMS.forEach(function(item) {
+    options += `<option value="${item.id}">${item.icon} ${escapeHTML(item.nama)}</option>`;
   });
-  container.innerHTML = tabsHtml;
+
+  select.innerHTML = options;
+  select.value = selectedFilterItem;
 }
 
 function filterMatrixItem(itemId) {
@@ -1192,11 +1452,12 @@ function exportData() {
   var payload = {
     exportedAt: new Date().toISOString(),
     app: 'age-mt-haryono',
-    version: 1,
+    version: 2,
     data: {
       'stock-state': loadJSON('stock-state', {}),
       'excel-matrix-data': loadJSON('excel-matrix-data', {}),
-      'riwayat-penjualan': loadJSON('riwayat-penjualan', [])
+      'riwayat-penjualan': loadJSON('riwayat-penjualan', []),
+      'custom-stock-items': loadJSON('custom-stock-items', [])
     }
   };
   var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -1232,7 +1493,9 @@ function importData(event) {
       if (data['stock-state']) saveJSON('stock-state', data['stock-state']);
       if (data['excel-matrix-data']) saveJSON('excel-matrix-data', data['excel-matrix-data']);
       if (data['riwayat-penjualan']) saveJSON('riwayat-penjualan', data['riwayat-penjualan']);
+      if (data['custom-stock-items']) saveJSON('custom-stock-items', data['custom-stock-items']);
 
+      rebuildStockItems();
       stockState = loadJSON('stock-state', {});
       excelMatrixData = loadJSON('excel-matrix-data', {});
       riwayatPenjualan = loadJSON('riwayat-penjualan', []);
@@ -1301,6 +1564,7 @@ function init() {
   tampilTanggal();
   initExcelDropdowns();
   loadBannerImage();
+  rebuildStockItems();
 
   var loadedState = loadJSON('stock-state', {});
   var todayStr = new Date().toDateString();
