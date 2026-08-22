@@ -1116,6 +1116,7 @@ function renderStockInputs() {
 
           renderChart();
           if (item.id === 'ayam') syncPenusukanDenganAyam();
+          pushStockStateToMatrixToday(item.id);
         });
       }
     });
@@ -1131,14 +1132,57 @@ function renderStockInputs() {
 
         renderChart();
         if (item.id === 'ayam') syncPenusukanDenganAyam();
+        pushStockStateToMatrixToday(item.id);
       });
     }
 
     var elKet = document.getElementById('input-ket-' + item.id);
     if (elKet) {
-      elKet.addEventListener('input', function(e) { stockState[item.id].keterangan = e.target.value; });
+      elKet.addEventListener('input', function(e) {
+        stockState[item.id].keterangan = e.target.value;
+        pushStockStateToMatrixToday(item.id);
+      });
     }
   });
+}
+
+/* SINKRON REALTIME: STOK INPUT -> MATRIX HARI INI */
+function getTodayParts() {
+  var d = new Date();
+  return { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
+}
+
+function isSameDayParts(year, month, day) {
+  var t = getTodayParts();
+  return Number(year) === t.year && Number(month) === t.month && Number(day) === t.day;
+}
+
+function pushStockStateToMatrixToday(itemId) {
+  var s = stockState[itemId];
+  if (!s) return;
+  var t = getTodayParts();
+  var key = getKeyYearMonth(t.year, t.month);
+  if (!excelMatrixData[key]) excelMatrixData[key] = {};
+  if (!excelMatrixData[key][itemId]) excelMatrixData[key][itemId] = {};
+
+  excelMatrixData[key][itemId][t.day] = {
+    awal: s.awal,
+    masuk: s.masuk,
+    keluar: s.keluar,
+    akhir: s.akhir,
+    isManualAwal: true,
+    isManualAkhir: false,
+    ket: s.keterangan || ''
+  };
+
+  recalculateChain(t.year, t.month, itemId);
+
+  // Refresh tampilan matrix jika sedang menampilkan bulan/tahun & item yang sama
+  var selBulan = document.getElementById('selectBulanExcel');
+  var selTahun = document.getElementById('selectTahunExcel');
+  if (selBulan && selTahun && Number(selBulan.value) === t.month && Number(selTahun.value) === t.year) {
+    renderExcelMatrix();
+  }
 }
 
 function syncPenusukanDenganAyam() {
@@ -1463,6 +1507,38 @@ function onMatrixCellChange(input, year, month, itemId, day, fieldKey) {
   }
 
   recalculateChain(year, month, itemId);
+
+  // SINKRON REALTIME: MATRIX -> STOK INPUT
+  // Berlaku untuk semua perubahan di bulan berjalan, bukan cuma baris hari ini —
+  // supaya koreksi Akhir di tanggal lain (yang ikut mengubah rantai Awal hari ini)
+  // tetap ter-refresh ke halaman Stok Barang.
+  var t = getTodayParts();
+  if (Number(year) === t.year && Number(month) === t.month && stockState[itemId]) {
+    var todayObj = excelMatrixData[key][itemId][t.day];
+    if (todayObj) {
+      var s = stockState[itemId];
+
+      if (todayObj.isManualAkhir) {
+        // Akhir hari ini diisi manual (mis. hasil stok opname) -> jadikan ini
+        // patokan stok saat ini. Reset Masuk & Keluar supaya rumus
+        // Awal+Masuk-Keluar=Akhir tetap konsisten dan input berikutnya di
+        // halaman Stok tidak jadi minus.
+        var akhirManual = todayObj.akhir !== '' ? Number(todayObj.akhir) : 0;
+        s.awal = akhirManual;
+        s.masuk = 0;
+        s.keluar = 0;
+        s.akhir = akhirManual;
+      } else {
+        s.awal = todayObj.awal !== '' ? Number(todayObj.awal) : 0;
+        s.masuk = todayObj.masuk !== '' ? Number(todayObj.masuk) : 0;
+        s.keluar = todayObj.keluar !== '' ? Number(todayObj.keluar) : 0;
+        s.akhir = (s.awal + s.masuk) - s.keluar;
+      }
+      s.keterangan = todayObj.ket || '';
+      saveJSON('stock-state', stockState);
+    }
+  }
+
   renderStockInputs();
   renderChart();
   syncPenusukanDenganAyam();
