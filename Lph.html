@@ -78,17 +78,10 @@ th {
 
 td { padding: 5px 2px; border-bottom: 1px solid #f7f7f7; vertical-align: middle; }
 
-input[type="text"], input[type="number"], select {
+input[type="text"], input[type="number"] {
   width: 100%; border: 1px solid #e0e0e0; border-radius: 6px;
   padding: 4px 2px; font-family: monospace; font-size: 10px; font-weight: 700;
   background: #ffffff; color: var(--text-main); outline: none;
-}
-
-select.order-type {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 9.5px; font-weight: 900; background: #fff59d;
-  border: 1px solid #fbc02d; cursor: pointer; padding: 4px 0;
-  text-align: center; color: #333; border-radius: 4px;
 }
 
 input.price {
@@ -97,13 +90,34 @@ input.price {
   color: var(--red-dark); padding: 4px 2px; font-size: 9.5px; font-weight: 800;
 }
 
-input:focus, select:focus {
+input:focus {
   border-color: var(--red-main);
   background: #ffffff;
   box-shadow: 0 0 5px rgba(211, 47, 47, 0.2);
 }
 
-.qty-input { text-align: center; font-weight: 900; background: #fafafa; color: #111; }
+.qty-control {
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+}
+
+.qty-btn {
+  background: #ffe082; border: 1px solid #fbc02d; color: #5d4037;
+  font-weight: 900; font-size: 12px; border-radius: 4px;
+  width: 18px; height: 22px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  user-select: none; padding: 0; line-height: 1;
+}
+.qty-btn:active { background: #fbc02d; }
+
+.qty-input { 
+  text-align: center; font-weight: 900; background: #fafafa; color: #111;
+  width: 24px !important; padding: 4px 0 !important;
+  -moz-appearance: textfield;
+}
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none; margin: 0;
+}
 
 .subtotal-val {
   font-size: 9.5px; font-weight: 900; color: var(--red-dark);
@@ -167,514 +181,733 @@ input:focus, select:focus {
       <thead>
         <tr>
           <th style="width: 32%;" class="text-left">Menu</th>
-          <th style="width: 8%;" class="text-center">D/T</th>
-          <th style="width: 23%;" class="text-right">Harga</th>
-          <th style="width: 10%;" class="text-center">Pcs</th>
-          <th style="width: 27%;" class="text-right">Subtotal</th>
+          <th style="width: 22%;" class="text-right">Harga</th>
+          <th style="width: 22%;" class="text-center">Pcs</th>
+          <th style="width: 24%;" class="text-right">Subtotal</th>
         </tr>
       </thead>
       <tbody id="menu-body">
         <!-- AYAM GULING -->
-        <tr class="item-row" data-dinein-price="69000" data-takeaway-price="69000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Original 1 ekor" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="69000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="35000" data-takeaway-price="35000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Original 1/2 ekor" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="35000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="20000" data-takeaway-price="20000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Original 1/4 ekor" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="20000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="69000" data-takeaway-price="69000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Western 1 ekor" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="69000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="35000" data-takeaway-price="35000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Western 1/2 ekor" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="35000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="20000" data-takeaway-price="20000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Western 1/4 ekor" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="20000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
 
         <!-- PAKET RAME ORI -->
-        <tr class="item-row" data-dinein-price="99000" data-takeaway-price="99000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Rame Ori Putih" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="99000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="116000" data-takeaway-price="116000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Rame Ori Mandhi" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="116000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="116000" data-takeaway-price="116000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Rame Ori Kebuli" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="116000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
 
         <!-- PAKET RAME WESTERN -->
-        <tr class="item-row" data-dinein-price="99000" data-takeaway-price="99000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Rame Western Putih" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="99000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="116000" data-takeaway-price="116000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Rame Western Mandhi" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="116000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="116000" data-takeaway-price="116000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Rame Western Kebuli" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="116000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
 
         <!-- PAKET BERKAH ORI -->
-        <tr class="item-row" data-dinein-price="20000" data-takeaway-price="20000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Berkah 1 (Ori)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="20000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="27000" data-takeaway-price="27000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Berkah 2 (Ori)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="27000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="27000" data-takeaway-price="27000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Berkah 3 (Ori)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="27000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
 
         <!-- PAKET BERKAH WESTERN -->
-        <tr class="item-row" data-dinein-price="20000" data-takeaway-price="20000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Berkah 1 (Western)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="20000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="27000" data-takeaway-price="27000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Berkah 2 (Western)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="27000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="27000" data-takeaway-price="27000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Berkah 3 (Western)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="27000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
 
-        <!-- PAKET ENAKKO -->
-        <tr class="item-row" data-dinein-price="29000" data-takeaway-price="30000">
-          <td class="text-left"><input type="text" value="Enakko 1" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
+        <!-- PAKET ENAKKO DINE IN -->
+        <tr class="item-row">
+          <td class="text-left"><input type="text" value="Enakko 1 (Dine In)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
           <td><input type="number" class="price text-right" value="29000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="33000" data-takeaway-price="35000">
-          <td class="text-left"><input type="text" value="Enakko 2" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
+        <tr class="item-row">
+          <td class="text-left"><input type="text" value="Enakko 2 (Dine In)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
           <td><input type="number" class="price text-right" value="33000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="33000" data-takeaway-price="35000">
-          <td class="text-left"><input type="text" value="Enakko 3" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
+        <tr class="item-row">
+          <td class="text-left"><input type="text" value="Enakko 3 (Dine In)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
           <td><input type="number" class="price text-right" value="33000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
 
-        <!-- PAKET MANTAP -->
-        <tr class="item-row" data-dinein-price="49000" data-takeaway-price="52000">
-          <td class="text-left"><input type="text" value="Mantap 1" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
+        <!-- PAKET ENAKKO TAKE AWAY -->
+        <tr class="item-row">
+          <td class="text-left"><input type="text" value="Enakko 1 (Take Away)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td><input type="number" class="price text-right" value="30000"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
+        </tr>
+        <tr class="item-row">
+          <td class="text-left"><input type="text" value="Enakko 2 (Take Away)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td><input type="number" class="price text-right" value="35000"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
+        </tr>
+        <tr class="item-row">
+          <td class="text-left"><input type="text" value="Enakko 3 (Take Away)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td><input type="number" class="price text-right" value="35000"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
+        </tr>
+
+        <!-- PAKET MANTAP DINE IN -->
+        <tr class="item-row">
+          <td class="text-left"><input type="text" value="Mantap 1 (Dine In)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
           <td><input type="number" class="price text-right" value="49000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="52000" data-takeaway-price="59000">
-          <td class="text-left"><input type="text" value="Mantap 2" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
+        <tr class="item-row">
+          <td class="text-left"><input type="text" value="Mantap 2 (Dine In)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
           <td><input type="number" class="price text-right" value="52000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="52000" data-takeaway-price="59000">
-          <td class="text-left"><input type="text" value="Mantap 3" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
+        <tr class="item-row">
+          <td class="text-left"><input type="text" value="Mantap 3 (Dine In)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
           <td><input type="number" class="price text-right" value="52000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
+        </tr>
+
+        <!-- PAKET MANTAP TAKE AWAY -->
+        <tr class="item-row">
+          <td class="text-left"><input type="text" value="Mantap 1 (Take Away)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td><input type="number" class="price text-right" value="52000"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
+        </tr>
+        <tr class="item-row">
+          <td class="text-left"><input type="text" value="Mantap 2 (Take Away)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td><input type="number" class="price text-right" value="59000"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
+        </tr>
+        <tr class="item-row">
+          <td class="text-left"><input type="text" value="Mantap 3 (Take Away)" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td><input type="number" class="price text-right" value="59000"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
 
         <!-- KEBAB -->
-        <tr class="item-row" data-dinein-price="10000" data-takeaway-price="10000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Kebab" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="10000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
 
         <!-- NASI -->
-        <tr class="item-row" data-dinein-price="5000" data-takeaway-price="5000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Nasi Putih" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="5000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="10000" data-takeaway-price="10000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Nasi Mandhi" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="10000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="10000" data-takeaway-price="10000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Nasi Kebuli" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="10000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
 
         <!-- CAMILAN -->
-        <tr class="item-row" data-dinein-price="10000" data-takeaway-price="10000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Kentang" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="10000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="10000" data-takeaway-price="10000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Sosis bakar" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="10000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="12000" data-takeaway-price="12000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Burger beef" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="12000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="15000" data-takeaway-price="15000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Burger cheese" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="15000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="20000" data-takeaway-price="20000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Kulit crispy" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="20000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
 
         <!-- MINUMAN -->
-        <tr class="item-row" data-dinein-price="5000" data-takeaway-price="5000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Prima btl" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="5000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="5000" data-takeaway-price="5000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Teh Btl Sosro 350ml" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="5000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="5000" data-takeaway-price="5000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Fruit tea" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="5000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="5000" data-takeaway-price="5000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Sweet ice tea" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="5000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="10000" data-takeaway-price="10000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Pink lava" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="10000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="10000" data-takeaway-price="10000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Green lava" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="10000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="10000" data-takeaway-price="10000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Manggo lava" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="10000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="7000" data-takeaway-price="7000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Squash orange" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="7000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="7000" data-takeaway-price="7000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Squash strawberry" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="7000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="7000" data-takeaway-price="7000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Squash leci" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="7000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
 
         <!-- SAMBAL & SAUS PORTION -->
-        <tr class="item-row" data-dinein-price="4000" data-takeaway-price="4000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Sambal Dower" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="4000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="4000" data-takeaway-price="4000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Sambal Hejo" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="4000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="4000" data-takeaway-price="4000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Sambal Tomat" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="4000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="4000" data-takeaway-price="4000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Saus Korean samyang" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="4000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="4000" data-takeaway-price="4000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Saus Smoke bbq" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="4000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="4000" data-takeaway-price="4000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Saus Blackpaper" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="4000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="4000" data-takeaway-price="4000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Saus Onion mayo" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="4000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="4000" data-takeaway-price="4000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Saus Cheese sauce" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="4000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row" data-dinein-price="4000" data-takeaway-price="4000">
+        <tr class="item-row">
           <td class="text-left"><input type="text" value="Saus Hot cheese" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
           <td><input type="number" class="price text-right" value="4000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-
-        <!-- SAMBAL PET CAN -->
-        <tr class="item-row" data-dinein-price="22000" data-takeaway-price="22000">
-          <td class="text-left"><input type="text" value="PET CAN Dower" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="22000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="22000" data-takeaway-price="22000">
-          <td class="text-left"><input type="text" value="PET CAN Tomat" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="22000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="22000" data-takeaway-price="22000">
-          <td class="text-left"><input type="text" value="PET CAN Hejo" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="22000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="22000" data-takeaway-price="22000">
-          <td class="text-left"><input type="text" value="PET CAN Bawang" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="22000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="22000" data-takeaway-price="22000">
-          <td class="text-left"><input type="text" value="PET CAN Cumi" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="22000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="22000" data-takeaway-price="22000">
-          <td class="text-left"><input type="text" value="PET CAN Cakalang" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="22000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="22000" data-takeaway-price="22000">
-          <td class="text-left"><input type="text" value="PET CAN Geprek" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="22000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="22000" data-takeaway-price="22000">
-          <td class="text-left"><input type="text" value="PET CAN Terasi" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="22000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-
-        <!-- SAMBAL POUCH -->
-        <tr class="item-row" data-dinein-price="26000" data-takeaway-price="26000">
-          <td class="text-left"><input type="text" value="Pouch Dower" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="26000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="26000" data-takeaway-price="26000">
-          <td class="text-left"><input type="text" value="Pouch Tomat" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="26000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="26000" data-takeaway-price="26000">
-          <td class="text-left"><input type="text" value="Pouch Hejo" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="26000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="26000" data-takeaway-price="26000">
-          <td class="text-left"><input type="text" value="Pouch Bawang" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="26000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="26000" data-takeaway-price="26000">
-          <td class="text-left"><input type="text" value="Pouch Cumi" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="26000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="26000" data-takeaway-price="26000">
-          <td class="text-left"><input type="text" value="Pouch Cakalang" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="26000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="26000" data-takeaway-price="26000">
-          <td class="text-left"><input type="text" value="Pouch Geprek" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="26000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
-          <td><span class="subtotal subtotal-val">Rp 0</span></td>
-        </tr>
-        <tr class="item-row" data-dinein-price="26000" data-takeaway-price="26000">
-          <td class="text-left"><input type="text" value="Pouch Terasi" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
-          <td><select class="order-type" onchange="updateRowPrice(this)"><option value="dinein">D</option><option value="takeaway">T</option></select></td>
-          <td><input type="number" class="price text-right" value="26000"></td>
-          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+              <input type="number" class="qty qty-input" placeholder="0" value="0">
+              <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+            </div>
+          </td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
       </tbody>
@@ -772,19 +1005,13 @@ function formatRupiah(number) {
   return "Rp " + new Intl.NumberFormat('id-ID').format(number);
 }
 
-function updateRowPrice(selectElement) {
-  const row = selectElement.closest('.item-row');
-  const priceInput = row.querySelector('.price');
-  
-  const dineinPrice = parseFloat(row.getAttribute('data-dinein-price')) || parseFloat(priceInput.value) || 0;
-  const takeawayPrice = parseFloat(row.getAttribute('data-takeaway-price')) || dineinPrice;
-  
-  if (selectElement.value === 'takeaway') {
-    priceInput.value = takeawayPrice;
-  } else {
-    priceInput.value = dineinPrice;
-  }
-  
+function changeQty(btn, delta) {
+  const container = btn.closest('.qty-control');
+  const qtyInput = container.querySelector('.qty');
+  let currentVal = parseFloat(qtyInput.value) || 0;
+  currentVal += delta;
+  if (currentVal < 0) currentVal = 0;
+  qtyInput.value = currentVal;
   calculateAll();
 }
 
@@ -839,14 +1066,14 @@ function addMenuRow() {
   tr.className = 'item-row';
   tr.innerHTML = `
     <td class="text-left"><input type="text" placeholder="Menu Lainnya" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+    <td><input type="number" class="price text-right" placeholder="0"></td>
     <td>
-      <select class="order-type" onchange="updateRowPrice(this)">
-        <option value="dinein">D</option>
-        <option value="takeaway">T</option>
-      </select>
+      <div class="qty-control">
+        <button class="qty-btn" onclick="changeQty(this, -1)">-</button>
+        <input type="number" class="qty qty-input" placeholder="0" value="0">
+        <button class="qty-btn" onclick="changeQty(this, 1)">+</button>
+      </div>
     </td>
-    <td><input type="number" class="price text-right" placeholder="0" oninput="this.closest('.item-row').setAttribute('data-dinein-price', this.value); this.closest('.item-row').setAttribute('data-takeaway-price', this.value);"></td>
-    <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
     <td><span class="subtotal subtotal-val">Rp 0</span></td>
   `;
   tbody.appendChild(tr);
