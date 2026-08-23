@@ -26,12 +26,30 @@ body {
 
 .container {
   width: 100%; max-width: 430px; background: var(--bg-app);
-  border-radius: 16px; padding: 12px; box-shadow: 0 0 30px rgba(0,0,0,0.5);
+  border-radius: 16px; padding: 8px; box-shadow: 0 0 30px rgba(0,0,0,0.5);
   display: flex; flex-direction: column; gap: 12px; position: relative;
 }
 
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  width: fit-content;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.back-btn:active { transform: scale(0.96); }
+
 .header {
-  text-align: center; padding: 6px 0; border-bottom: 2px solid var(--border);
+  text-align: center; padding: 4px 0; border-bottom: 2px solid var(--border);
 }
 .header h1 { margin: 0; font-size: 16px; font-weight: 900; color: var(--dark-red); }
 .header p { margin: 2px 0 0; font-size: 10px; color: var(--text-sub); font-weight: 600; }
@@ -43,7 +61,7 @@ body {
 }
 
 .card-title {
-  background: var(--dark-red); color: #fff; padding: 8px 12px;
+  background: var(--dark-red); color: #fff; padding: 6px 10px;
   font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
 }
 
@@ -51,52 +69,65 @@ table { width: 100%; border-collapse: collapse; font-size: 11px; table-layout: f
 
 th {
   background: #faf8f5; color: var(--text-sub); font-weight: 800;
-  font-size: 9px; padding: 6px 4px; border-bottom: 1px solid var(--border);
+  font-size: 9px; padding: 6px 1px; border-bottom: 1px solid var(--border);
   text-transform: uppercase;
 }
 
-td { padding: 6px 4px; border-bottom: 1px solid #f7f3eb; vertical-align: middle; }
+td { padding: 4px 1px; border-bottom: 1px solid #f7f3eb; vertical-align: middle; }
 
-input[type="text"], input[type="number"] {
-  width: 100%; border: 1px solid #e0d7cb; border-radius: 6px;
-  padding: 5px 4px; font-family: monospace; font-size: 11px; font-weight: 700;
+input[type="text"], input[type="number"], select {
+  width: 100%; border: 1px solid #e0d7cb; border-radius: 4px;
+  padding: 4px 1px; font-family: monospace; font-size: 10px; font-weight: 700;
   background: #fdfbf7; color: var(--text-main); outline: none;
 }
 
-/* HARGA DIBIKIN BISA DIEDIT (INPUT EDITABLE) */
+/* DROPDOWN D/T LEBIH TIPIS */
+select.order-type {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 9px;
+  font-weight: 900;
+  background: #fff;
+  border: 1px solid #dcd0b9;
+  cursor: pointer;
+  padding: 4px 0;
+  text-align: center;
+  color: var(--dark-red);
+}
+
 input.price {
   background: #fffdf5;
   border: 1px solid #dcd0b9;
   color: #8f080d;
+  padding: 4px 2px;
+  font-size: 9.5px;
 }
 
-input:focus { border-color: var(--primary-red); background: #fff; }
+input:focus, select:focus { border-color: var(--primary-red); background: #fff; }
 
-.qty-input { text-align: center; font-weight: 800; }
+.qty-input { text-align: center; font-weight: 800; padding: 4px 0; }
 
-/* SUBTOTAL SANGAT KELIATAN JELAS */
+/* SUBTOTAL SANGAT KELIATAN & PRESS SIZE */
 .subtotal-val {
-  font-size: 11px; font-weight: 900; color: #1f1a17;
+  font-size: 9.5px; font-weight: 900; color: #1f1a17;
   font-family: monospace; text-align: right; display: block;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; overflow: hidden; text-overflow: clip;
+  letter-spacing: -0.3px;
 }
 
-/* TOTAL ROW */
 .total-row {
   background: #1f1a17 !important; color: #fff;
 }
 .total-row td {
-  padding: 10px 8px; border-top: 1px solid var(--border);
+  padding: 8px 6px; border-top: 1px solid var(--border);
 }
 .total-label {
   font-size: 10px; font-weight: 800; color: #d1c7b7; letter-spacing: 0.5px;
 }
 .total-val {
-  font-size: 15px; font-weight: 900; color: var(--gold);
+  font-size: 14px; font-weight: 900; color: var(--gold);
   text-align: right; font-family: monospace; display: block; width: 100%;
 }
 
-/* STICKY BOTTOM BAR HASIL BERSIH */
 .net-card {
   position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
   width: calc(100% - 24px); max-width: 430px;
@@ -110,7 +141,7 @@ input:focus { border-color: var(--primary-red); background: #fff; }
 .add-btn {
   background: #f1ece4; border: 1px solid #dcd3c4; border-radius: 6px;
   color: #4a4235; font-weight: 800; font-size: 10px; padding: 6px 8px;
-  cursor: pointer; margin: 8px; width: calc(100% - 16px);
+  cursor: pointer; margin: 6px 4px; width: calc(100% - 8px);
 }
 .add-btn:active { transform: scale(0.98); }
 
@@ -123,6 +154,8 @@ input:focus { border-color: var(--primary-red); background: #fff; }
 
 <div class="container">
 
+  <button class="back-btn" onclick="history.back()">← Kembali</button>
+
   <div class="header">
     <h1>AYAM GULING ENAKKO</h1>
     <p>Laporan Penjualan & Pengeluaran Harian</p>
@@ -134,69 +167,174 @@ input:focus { border-color: var(--primary-red); background: #fff; }
     <table id="tbl-enakko">
       <thead>
         <tr>
+          <!-- ALOKASI PERSENTASE LEBAR KOLOM SESUAI UKURAN LEBAR LAYAR -->
           <th style="width: 32%;" class="text-left">Menu</th>
-          <th style="width: 25%;" class="text-right">Harga</th>
-          <th style="width: 13%;" class="text-center">Pcs</th>
-          <th style="width: 30%;" class="text-right">Subtotal</th>
+          <th style="width: 8%;" class="text-center">D/T</th>
+          <th style="width: 23%;" class="text-right">Harga</th>
+          <th style="width: 10%;" class="text-center">Pcs</th>
+          <th style="width: 27%;" class="text-right">Subtotal</th>
         </tr>
       </thead>
-      <tbody>
-        <tr class="item-row">
-          <td class="text-left">Original 1 ekor</td>
+      <tbody id="menu-body">
+        <tr class="item-row" data-base-price="69000">
+          <td class="text-left"><input type="text" value="Original 1 ekor" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
           <td><input type="number" class="price text-right" value="69000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row">
-          <td class="text-left">Original ½ ekor</td>
+        <tr class="item-row" data-base-price="35000">
+          <td class="text-left"><input type="text" value="Original ½ ekor" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
           <td><input type="number" class="price text-right" value="35000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row">
-          <td class="text-left">Original ¼ ekor</td>
+        <tr class="item-row" data-base-price="20000">
+          <td class="text-left"><input type="text" value="Original ¼ ekor" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
           <td><input type="number" class="price text-right" value="20000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row">
-          <td class="text-left">Enakko 1</td>
+        <tr class="item-row" data-base-price="69000">
+          <td class="text-left"><input type="text" value="Enakko 1" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
           <td><input type="number" class="price text-right" value="69000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row">
-          <td class="text-left">Enakko 2</td>
+        <tr class="item-row" data-base-price="35000">
+          <td class="text-left"><input type="text" value="Enakko 2" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
           <td><input type="number" class="price text-right" value="35000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row">
-          <td class="text-left">Enakko 3</td>
+        <tr class="item-row" data-base-price="20000">
+          <td class="text-left"><input type="text" value="Enakko 3" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
           <td><input type="number" class="price text-right" value="20000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row">
-          <td class="text-left">Berkah 1</td>
+        <tr class="item-row" data-base-price="20000">
+          <td class="text-left"><input type="text" value="Berkah 1" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
           <td><input type="number" class="price text-right" value="20000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row">
-          <td class="text-left">Berkah 2</td>
+        <tr class="item-row" data-base-price="20000">
+          <td class="text-left"><input type="text" value="Berkah 2" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
           <td><input type="number" class="price text-right" value="20000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
-        <tr class="item-row">
-          <td class="text-left">Berkah 3</td>
+        <tr class="item-row" data-base-price="20000">
+          <td class="text-left"><input type="text" value="Berkah 3" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
           <td><input type="number" class="price text-right" value="20000"></td>
+          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
+        </tr>
+        <tr class="item-row" data-base-price="20000">
+          <td class="text-left"><input type="text" value="Mantap 1" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
+          <td><input type="number" class="price text-right" value="20000"></td>
+          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
+        </tr>
+        <tr class="item-row" data-base-price="20000">
+          <td class="text-left"><input type="text" value="Mantap 2" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
+          <td><input type="number" class="price text-right" value="20000"></td>
+          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
+        </tr>
+        <tr class="item-row" data-base-price="20000">
+          <td class="text-left"><input type="text" value="Mantap 3" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
+          <td><input type="number" class="price text-right" value="20000"></td>
+          <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+          <td><span class="subtotal subtotal-val">Rp 0</span></td>
+        </tr>
+        <tr class="item-row" data-base-price="15000">
+          <td class="text-left"><input type="text" value="Paket Promo" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+          <td>
+            <select class="order-type" onchange="updateRowPrice(this)">
+              <option value="dinein">D</option>
+              <option value="takeaway">T</option>
+            </select>
+          </td>
+          <td><input type="number" class="price text-right" value="15000"></td>
           <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
           <td><span class="subtotal subtotal-val">Rp 0</span></td>
         </tr>
       </tbody>
     </table>
+    <button class="add-btn" onclick="addMenuRow()">＋ Baris Menu Baru</button>
     <table>
       <tr class="total-row">
         <td style="width: 50%;" class="total-label">TOTAL OUTLET</td>
@@ -285,8 +423,29 @@ let totalEnakko = 0;
 let totalOnline = 0;
 let totalPengeluaran = 0;
 
+const TAKEAWAY_EXTRA = 2000;
+
 function formatRupiah(number) {
   return "Rp " + new Intl.NumberFormat('id-ID').format(number);
+}
+
+function updateRowPrice(selectElement) {
+  const row = selectElement.closest('.item-row');
+  const priceInput = row.querySelector('.price');
+  
+  if (!row.getAttribute('data-base-price')) {
+    row.setAttribute('data-base-price', priceInput.value || 0);
+  }
+  
+  const basePrice = parseFloat(row.getAttribute('data-base-price')) || 0;
+  
+  if (selectElement.value === 'takeaway') {
+    priceInput.value = basePrice + TAKEAWAY_EXTRA;
+  } else {
+    priceInput.value = basePrice;
+  }
+  
+  calculateAll();
 }
 
 function calculateSalesEnakko() {
@@ -327,6 +486,33 @@ function calculateNet() {
   document.getElementById('net-penjualan').textContent = formatRupiah(netTotal);
 }
 
+function calculateAll() {
+  calculateSalesEnakko();
+  calculateOnline();
+  calculateExpenses();
+  calculateNet();
+}
+
+function addMenuRow() {
+  const tbody = document.getElementById('menu-body');
+  const tr = document.createElement('tr');
+  tr.className = 'item-row';
+  tr.setAttribute('data-base-price', '0');
+  tr.innerHTML = `
+    <td class="text-left"><input type="text" placeholder="Menu Lainnya" style="font-family:-apple-system; font-size:9.5px; padding:4px 1px;"></td>
+    <td>
+      <select class="order-type" onchange="updateRowPrice(this)">
+        <option value="dinein">D</option>
+        <option value="takeaway">T</option>
+      </select>
+    </td>
+    <td><input type="number" class="price text-right" placeholder="0" oninput="this.closest('.item-row').setAttribute('data-base-price', this.value)"></td>
+    <td><input type="number" class="qty qty-input text-center" placeholder="0"></td>
+    <td><span class="subtotal subtotal-val">Rp 0</span></td>
+  `;
+  tbody.appendChild(tr);
+}
+
 function addExpenseRow() {
   const tbody = document.getElementById('expense-body');
   const tr = document.createElement('tr');
@@ -338,12 +524,7 @@ function addExpenseRow() {
   tbody.appendChild(tr);
 }
 
-document.addEventListener('input', function() {
-  calculateSalesEnakko();
-  calculateOnline();
-  calculateExpenses();
-  calculateNet();
-});
+document.addEventListener('input', calculateAll);
 </script>
 
 </body>
