@@ -15,7 +15,6 @@
 <link rel="icon" href="/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <title>AGE MT. HARYONO - Modern Tab</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root {
   --primary-red: #d71920;
@@ -250,7 +249,6 @@ html, body {
 .stock-actions .save { width: 100%; margin: 0; }
 .save-status { text-align: center; font-size: 9px; font-weight: 600; color: var(--text-sub); min-height: 12px; padding-bottom: 2px; }
 
-
 /* ========= STOCK GRID 2 KOLOM ========= */
 #stockCards {
   display: grid;
@@ -276,16 +274,7 @@ html, body {
 #stockCards .note-input { height: 26px; margin-top: 5px; font-size: 8px; padding: 0 6px; }
 #stockCards .stock-item-save { height: 28px; margin: 5px 0 0; font-size: 8px; }
 
-
-/* ========= CHART & TABLES ========= */
-.chart-card { padding: 12px; }
-.chart-wrap { height: 160px; position: relative; margin-top: 4px; }
-.legend-list { margin-top: 10px; display: flex; flex-direction: column; gap: 5px; }
-.legend-row { display: flex; align-items: center; gap: 6px; font-size: 10px; }
-.legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
-.legend-name { flex: 1; color: #4a4235; font-weight: 600; }
-.legend-val { font-family: monospace; font-weight: 800; }
-
+/* ========= TABLES & RIWAYAT ========= */
 .riwayat-head { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; }
 .riwayat-head h2 { margin: 0; font-size: 12px; font-weight: 800; }
 .month-controls { display: flex; align-items: center; gap: 4px; }
@@ -444,10 +433,9 @@ td.empty { text-align: center; color: var(--text-sub); padding: 14px 6px; font-s
           <div id="salesSaveStatus" class="save-status"></div>
         </div>
 
-        <div class="section-title">📊 Stock Barang <small>Posisi stok terkini</small></div>
-        <div class="card chart-card">
-          <div class="chart-wrap"><canvas id="stockChart"></canvas></div>
-          <div class="legend-list" id="legendList"></div>
+        <div class="section-title">📊 Status Stok Ringkas <small>Kondisi terkini</small></div>
+        <div id="stockStatusGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px;">
+          <!-- Kartu Indikator Stok di-render via JS -->
         </div>
 
       </div>
@@ -579,7 +567,6 @@ let STOCK_ITEMS = [];
 let stockState = {};
 let excelMatrixData = {};
 let riwayatPenjualan = [];
-let stockChartInstance = null;
 let confirmDeleteP = false;
 let selectedFilterItem = 'all';
 
@@ -689,7 +676,7 @@ function tambahStockMassal() {
   renderStockInputs();
   renderFilterTabs();
   renderExcelMatrix();
-  renderChart();
+  renderStockStatusGrid();
 
   textarea.value = '';
   status.style.color = '#137333';
@@ -747,7 +734,7 @@ function hapusStockMassal() {
   renderStockInputs();
   renderFilterTabs();
   renderExcelMatrix();
-  renderChart();
+  renderStockStatusGrid();
 
   textarea.value = '';
   status.style.color = '#137333';
@@ -889,7 +876,7 @@ async function pullState(silent) {
     renderStockInputs();
     renderRiwayatPenjualan();
     renderExcelMatrix();
-    renderChart();
+    renderStockStatusGrid();
     syncPenusukanDenganAyam();
     if (!silent) setSyncBadge('✓ Data diperbarui dari device lain', true);
     setTimeout(function () { setSyncBadge('', false); }, 2000);
@@ -1031,10 +1018,6 @@ function gotoPage(name, pageIndex) {
   document.querySelectorAll('.navbtn').forEach(b => {
     b.classList.toggle('active', b.dataset.page === name);
   });
-
-  if (name === 'beranda' && stockChartInstance) {
-    setTimeout(() => stockChartInstance.resize(), 300);
-  }
 }
 
 /* PENJUALAN AYAM */
@@ -1144,7 +1127,7 @@ function renderStockInputs() {
             if (inputKeluar) inputKeluar.value = s.keluar;
           }
 
-          renderChart();
+          renderStockStatusGrid();
           if (item.id === 'ayam') syncPenusukanDenganAyam();
           pushStockStateToMatrixToday(item.id);
         });
@@ -1160,7 +1143,7 @@ function renderStockInputs() {
         var inputAkhir = document.getElementById('input-akhir-' + item.id);
         if (inputAkhir) inputAkhir.value = s.akhir;
 
-        renderChart();
+        renderStockStatusGrid();
         if (item.id === 'ayam') syncPenusukanDenganAyam();
         pushStockStateToMatrixToday(item.id);
       });
@@ -1180,11 +1163,6 @@ function renderStockInputs() {
 function getTodayParts() {
   var d = new Date();
   return { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
-}
-
-function isSameDayParts(year, month, day) {
-  var t = getTodayParts();
-  return Number(year) === t.year && Number(month) === t.month && Number(day) === t.day;
 }
 
 function pushStockStateToMatrixToday(itemId) {
@@ -1207,7 +1185,6 @@ function pushStockStateToMatrixToday(itemId) {
 
   recalculateChain(t.year, t.month, itemId);
 
-  // Refresh tampilan matrix jika sedang menampilkan bulan/tahun & item yang sama
   var selBulan = document.getElementById('selectBulanExcel');
   var selTahun = document.getElementById('selectTahunExcel');
   if (selBulan && selTahun && Number(selBulan.value) === t.month && Number(selTahun.value) === t.year) {
@@ -1252,7 +1229,7 @@ function simpanStockItem(itemId) {
   renderExcelMatrix();
 
   document.getElementById('stockSaveStatus').textContent = '✓ ' + item.nama + ' tersimpan!';
-  renderChart();
+  renderStockStatusGrid();
 }
 
 function simpanSemuaStock() {
@@ -1285,108 +1262,51 @@ function simpanSemuaStock() {
   renderExcelMatrix();
 
   document.getElementById('stockSaveStatus').textContent = '✓ Semua stok tersimpan!';
-  renderChart();
+  renderStockStatusGrid();
 }
 
-/* DIAGRAM STOCK */
-function renderChart() {
-  var canvas = document.getElementById('stockChart');
-  if (!canvas || typeof Chart === 'undefined') return;
+/* INDIKATOR STATUS STOK RINGKAS (PENGGANTI CHART) */
+function renderStockStatusGrid() {
+  const container = document.getElementById('stockStatusGrid');
+  if (!container) return;
 
-  /* DIAGRAM BERANDA — SUMBER UTAMA DARI RIWAYAT STOCK BARANG
-     Ambil nilai AKHIR terbaru dari matrix/riwayat stock bulan berjalan.
-     Jadi diagram selalu mengikuti data Riwayat Stock Barang, bukan data
-     input stok terpisah. */
-  var today = new Date();
-  var key = getKeyYearMonth(today.getFullYear(), today.getMonth() + 1);
-  var monthData = excelMatrixData[key] || {};
+  const today = new Date();
+  const key = getKeyYearMonth(today.getFullYear(), today.getMonth() + 1);
+  const monthData = excelMatrixData[key] || {};
 
-  var labels = [];
-  var data = [];
-  var colors = [];
+  container.innerHTML = STOCK_ITEMS.map(item => {
+    const itemData = monthData[item.id] || {};
+    let latestDay = 0;
+    let latestValue = 0;
 
-  STOCK_ITEMS.forEach(function(item) {
-    var itemData = monthData[item.id] || {};
-    var latestDay = 0;
-    var latestValue = 0;
-
-    Object.keys(itemData).forEach(function(day) {
-      var d = Number(day);
-      var row = itemData[day];
-      if (!row || isNaN(d)) return;
-      if (row.akhir !== '' && d >= latestDay) {
+    Object.keys(itemData).forEach(day => {
+      const d = Number(day);
+      const row = itemData[day];
+      if (row && row.akhir !== '' && d >= latestDay) {
         latestDay = d;
         latestValue = Number(row.akhir) || 0;
       }
     });
 
-    /* Kalau belum ada riwayat bulan ini, tampilkan 0.
-       Jangan mengambil stockState agar sumber diagram tetap konsisten. */
-    labels.push(item.icon + ' ' + item.nama);
-    data.push(latestValue);
-    colors.push(item.color);
-  });
+    let badgeBg = '#e6f4ea', badgeColor = '#137333', statusText = 'Aman';
+    if (latestValue <= 2) {
+      badgeBg = '#fce8e6'; badgeColor = '#b3261e'; statusText = 'Kritis';
+    } else if (latestValue <= 5) {
+      badgeBg = '#fff4d6'; badgeColor = '#a36b00'; statusText = 'Menipis';
+    }
 
-  if (stockChartInstance) {
-    stockChartInstance.data.labels = labels;
-    stockChartInstance.data.datasets[0].data = data;
-    stockChartInstance.data.datasets[0].backgroundColor = colors;
-    stockChartInstance.update();
-  } else {
-    stockChartInstance = new Chart(canvas, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Stok akhir',
-          data: data,
-          backgroundColor: colors,
-          borderRadius: 8,
-          borderSkipped: false,
-          barThickness: 16,
-          maxBarThickness: 18
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 350 },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            displayColors: false,
-            callbacks: {
-              label: function(ctx) {
-                var item = STOCK_ITEMS[ctx.dataIndex];
-                return ' ' + format(ctx.parsed.x) + ' ' + (item ? item.unit : '');
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            beginAtZero: true,
-            grid: { color: '#eee9df' },
-            ticks: { font: { size: 9 } }
-          },
-          y: {
-            grid: { display: false },
-            ticks: { font: { size: 9 }, padding: 4 }
-          }
-        }
-      }
-    });
-  }
-
-  var legend = document.getElementById('legendList');
-  if (!legend) return;
-  legend.innerHTML = STOCK_ITEMS.map(function(item, idx) {
-    return '<div class="legend-row">' +
-      '<div class="legend-dot" style="background:' + item.color + '"></div>' +
-      '<div class="legend-name">' + escapeHTML(item.nama) + '</div>' +
-      '<div class="legend-val">' + format(data[idx]) + ' ' + item.unit + '</div>' +
-      '</div>';
+    return `
+      <div style="background:#fff; border-radius:12px; padding:10px; border:1px solid var(--border); box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <span style="font-size:16px;">${item.icon}</span>
+          <span style="font-size:8px; font-weight:800; padding:2px 6px; border-radius:6px; background:${badgeBg}; color:${badgeColor};">${statusText}</span>
+        </div>
+        <div style="font-size:10px; font-weight:800; color:var(--text-main); line-height:1.2;">${escapeHTML(item.nama)}</div>
+        <div style="font-size:14px; font-weight:900; font-family:monospace; margin-top:4px; color:var(--dark-red);">
+          ${format(latestValue)} <small style="font-size:8px; font-weight:600; color:var(--text-sub);">${item.unit}</small>
+        </div>
+      </div>
+    `;
   }).join('');
 }
 
@@ -1504,8 +1424,6 @@ function syncTodayStockToMatrix(itemId) {
 
   var row = excelMatrixData[key][itemId][t.day];
 
-  // Jangan menimpa data Matrix yang sudah diketik.
-  // Hanya buat baris baru jika memang belum ada.
   if (!row) {
     row = {
       awal: Number(s.awal) || 0,
@@ -1634,13 +1552,6 @@ function onMatrixCellChange(input, year, month, itemId, day, fieldKey) {
       dayObj.isManualAwal = input.value !== '';
 
     } else if (fieldKey === 'akhir') {
-      /*
-       * RUMUS UTAMA:
-       * Awal 10, Masuk 0, Akhir diketik 5
-       * => Keluar otomatis = 10 + 0 - 5 = 5
-       *
-       * Jadi user cukup isi STOK AKHIR, kolom KELUAR langsung mengikuti.
-       */
       if (input.value !== '') {
         dayObj.akhir = hasilAngka;
 
@@ -1648,7 +1559,6 @@ function onMatrixCellChange(input, year, month, itemId, day, fieldKey) {
         const masuk = dayObj.masuk !== '' ? Number(dayObj.masuk) : 0;
         dayObj.keluar = (awal + masuk) - Number(dayObj.akhir);
 
-        // Akhir bukan lagi "manual patokan"; keluar menjadi hasil perhitungan.
         dayObj.isManualAkhir = false;
       } else {
         dayObj.akhir = '';
@@ -1659,7 +1569,6 @@ function onMatrixCellChange(input, year, month, itemId, day, fieldKey) {
     } else if (fieldKey === 'masuk') {
       dayObj.masuk = input.value !== '' ? hasilAngka : '';
 
-      // Jika Akhir sudah ada, perubahan Masuk otomatis mengubah Keluar.
       if (dayObj.akhir !== '') {
         const awal = dayObj.awal !== '' ? Number(dayObj.awal) : 0;
         const masuk = dayObj.masuk !== '' ? Number(dayObj.masuk) : 0;
@@ -1670,7 +1579,6 @@ function onMatrixCellChange(input, year, month, itemId, day, fieldKey) {
     } else if (fieldKey === 'keluar') {
       dayObj.keluar = input.value !== '' ? hasilAngka : '';
 
-      // Jika Keluar diubah, Akhir otomatis dihitung.
       if (dayObj.keluar !== '') {
         const awal = dayObj.awal !== '' ? Number(dayObj.awal) : 0;
         const masuk = dayObj.masuk !== '' ? Number(dayObj.masuk) : 0;
@@ -1680,10 +1588,8 @@ function onMatrixCellChange(input, year, month, itemId, day, fieldKey) {
     }
   }
 
-  // Rantai tanggal tetap dihitung.
   recalculateChain(year, month, itemId);
 
-  // SINKRON MATRIX -> STOK BARANG untuk hari ini.
   var t = getTodayParts();
   if (Number(year) === t.year && Number(month) === t.month && stockState[itemId]) {
     var todayObj = excelMatrixData[key][itemId][t.day];
@@ -1704,7 +1610,7 @@ function onMatrixCellChange(input, year, month, itemId, day, fieldKey) {
   saveJSON('excel-matrix-data', excelMatrixData);
 
   renderStockInputs();
-  renderChart();
+  renderStockStatusGrid();
   syncPenusukanDenganAyam();
   renderExcelMatrix();
 }
@@ -1765,7 +1671,7 @@ function importData(event) {
       renderStockInputs();
       renderRiwayatPenjualan();
       renderExcelMatrix();
-      renderChart();
+      renderStockStatusGrid();
       syncPenusukanDenganAyam();
 
       status.textContent = '✓ Data berhasil di-import!';
@@ -1849,7 +1755,7 @@ function init() {
   renderRiwayatPenjualan();
   renderFilterTabs();
   renderExcelMatrix();
-  renderChart();
+  renderStockStatusGrid();
   hitungPenjualan();
   syncPenusukanDenganAyam();
 }
